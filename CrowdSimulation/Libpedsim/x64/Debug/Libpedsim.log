@@ -1,50 +1,29 @@
-﻿Build started 2018-01-22 23:17:34.
-     1>Project "X:\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" on node 2 (Rebuild target(s)).
-     1>CudaClean:
-         cmd.exe /C "C:\Users\alla7073\AppData\Local\Temp\tmp90e1a7b2b48940f38b2b466e4c19a0e6.cmd"
-         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile   -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "X:\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu" -clean
-         
-         X:\CrowdSimulation2018\CrowdSimulation\Libpedsim>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile   -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "X:\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu" -clean 
-         cuda_testkernel.cu
-       AddCudaCompileDeps:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /DWIN64 /D_DEBUG /D_CONSOLE /D_MBCS /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I. /FIcuda_runtime.h /c X:\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu 
-       CudaBuild:
-         Compiling CUDA source file src\cuda_testkernel.cu...
-         cmd.exe /C "C:\Users\alla7073\AppData\Local\Temp\tmp67039a4e5e3d468d9e9961282cb696cd.cmd"
-         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "X:\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu"
-         
-         X:\CrowdSimulation2018\CrowdSimulation\Libpedsim>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "X:\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu" 
-         cuda_testkernel.cu
-       ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D WIN64 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt src\heatmap_seq.cpp src\ped_agent.cpp src\ped_model.cpp src\ped_vector.cpp src\ped_waypoint.cpp
-         ped_waypoint.cpp
-         ped_vector.cpp
+﻿Build started 2018-01-25 17:19:43.
+     1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D WIN64 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt src\ped_model.cpp
          ped_model.cpp
-     1>src\ped_model.cpp(72): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>src\ped_model.cpp(85): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>src\ped_model.cpp(118): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>src\ped_model.cpp(169): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-         ped_agent.cpp
-         heatmap_seq.cpp
-         Generating Code...
+     1>src\ped_model.cpp(71): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(114): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(196): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"X:\CrowdSimulation2018\CrowdSimulation\x64\Debug\Libpedsim.lib" /NOLOGO /MACHINE:X64 x64\Debug\cuda_testkernel.cu.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\Libpedsim.lib" /NOLOGO /MACHINE:X64 x64\Debug\cuda_testkernel.cu.obj
          x64\Debug\heatmap_seq.obj
          x64\Debug\ped_agent.obj
          x64\Debug\ped_model.obj
          x64\Debug\ped_vector.obj
          x64\Debug\ped_waypoint.obj
-         Libpedsim.vcxproj -> X:\CrowdSimulation2018\CrowdSimulation\x64\Debug\Libpedsim.lib
+         Libpedsim.vcxproj -> C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\Libpedsim.lib
        PostBuildEvent:
-         echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "X:\CrowdSimulation2018\CrowdSimulation\x64\Debug\"
-         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "X:\CrowdSimulation2018\CrowdSimulation\x64\Debug\"
+         echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\"
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\"
          :VCEnd
-         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "X:\CrowdSimulation2018\CrowdSimulation\x64\Debug\"
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\"
          C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart32_75.dll
          C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart64_75.dll
                  2 file(s) copied.
-     1>Done Building Project "X:\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" (Rebuild target(s)).
+     1>Done Building Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:12.76
+Time Elapsed 00:00:01.33

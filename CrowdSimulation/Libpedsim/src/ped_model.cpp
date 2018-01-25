@@ -44,22 +44,16 @@ void Ped::Model::setup(std::vector<Ped::Tagent*> agentsInScenario, std::vector<T
 	if (implementation == OMP_2)
 		omp_set_num_threads(threadNum);
 
-	// Its not hacks if it works!
-	// This Doesnt work.
-	if (implementation == PTHREAD_2){
-		//agentsWaitMtx.reserve(threadNum);
-		//agentsDoneMtx.reserve(threadNum);
-		for (int i = 0; i < threadNum; i++){
-			agentComputationSem.emplace_back(CreateSemaphore(NULL, 0, 1, NULL));
-			agentCompletionSem.emplace_back(CreateSemaphore(NULL, 0, 1, NULL));
-		}
-		threadCompActive = true;
-		tickThreads = new std::thread[threadNum];
+	//Split up the workload in chunks of N number of threads
+	chunkUp();
+
+	// Prep the threads for parallelization
+	if (implementation == PTHREAD_2)
 		Ped::Model::pthreadPrepTick();
-	}
 }
 
 
+// Sequential tick..
 void Ped::Model::seqTick(){
 	for (auto agent : this->agents){
 		agent->computeNextDesiredPosition();
@@ -68,6 +62,11 @@ void Ped::Model::seqTick(){
 	}
 }
 
+
+/*
+*	OpenMP version of tick().
+*	Simpler version where the workload is chunked up by OpenMP
+*/
 void Ped::Model::ompTick(){
 	int size = this->agents.size();
 
@@ -80,22 +79,17 @@ void Ped::Model::ompTick(){
 	}
 }
 
+/*
+*	OpenMP version of tic()
+*	Chunks are already divided and the work to be done
+*   can be done in parallel.
+*/
 void Ped::Model::ompTick_ver2(){
-	
-	int totalSize = this->agents.size();
-	int chunkSize = totalSize / threadNum;
-	int rest = totalSize % threadNum;
-
-	std::vector<int> chunks(threadNum, chunkSize);
-	for (int i = 0; i < rest; i++){
-		chunks[i] += 1;
-	}
-
 	#pragma omp parallel
 	{
 		int thread_id = omp_get_thread_num();
 
-		for (int j = chunks[thread_id] * thread_id; j < chunks[thread_id] * (thread_id + 1); j++)
+		for (int j = (*chunks)[thread_id] * thread_id; j < (*chunks)[thread_id] * (thread_id + 1); j++)
 		{
 			Tagent *agent = this->agents[j];
 			agent->computeNextDesiredPosition();
@@ -104,6 +98,8 @@ void Ped::Model::ompTick_ver2(){
 		}
 	}	
 }
+
+/* old thread version*/
 
 void Ped::Model::computeAgentsInRange(std::vector<Tagent*>::iterator current, std::vector<Tagent*>::iterator end){
 	for (current; current < end; current++){
@@ -135,13 +131,15 @@ void Ped::Model::pthreadTick(){
 }
 
 
-/*
-Currently non working.
-Donalt Knuth said that Science is what computers understand and the rest is Art.
-This is definetly art.
+
+/* 
+*	Thread version of the tick functions compute part.
+*	Computes and Sets the destination of all agents in the given range.
 */
 void Ped::Model::computeAgentsInRange_version2(std::vector<Tagent*>::iterator start, std::vector<Tagent*>::iterator end, int threadId){
 	while (threadCompActive){
+
+		// Wait for the go signal from tick()
 		WaitForSingleObject(agentComputationSem[threadId], INFINITE);
 		
 		std::vector<Tagent*>::iterator current = start;
@@ -151,12 +149,15 @@ void Ped::Model::computeAgentsInRange_version2(std::vector<Tagent*>::iterator st
 			(*current)->setY((*current)->getDesiredY());
 		}
 		
+		/* 
+		*	Instead of joining() on each thread we tell the tick() that
+		*	we are done by semaphore.
+		*/
 		ReleaseSemaphore(agentCompletionSem[threadId], 1, NULL);
 	}
 }
 
 void Ped::Model::pthreadTick_ver2(){
-	
 	for (int i = 0; i < agentComputationSem.size(); i++){
 		ReleaseSemaphore(agentComputationSem[i], 1, NULL);
 	}
@@ -166,33 +167,45 @@ void Ped::Model::pthreadTick_ver2(){
 
 
 void Ped::Model::pthreadPrepTick(){
-	int totalSize = this->agents.size();
-	int chunkSize = totalSize / threadNum;
-	int rest = totalSize % threadNum;
 
-	std::vector<int> chunks(threadNum, chunkSize);
-	for (int i = 0; i < rest; i++){
-		chunks[i] += 1;
+	// Create the semaphores which will control the threads
+	agentComputationSem.reserve(threadNum);
+	agentCompletionSem.reserve(threadNum);
+	for (int i = 0; i < threadNum; i++){
+		agentComputationSem.emplace_back(CreateSemaphore(NULL, 0, 1, NULL));
+		agentCompletionSem.emplace_back(CreateSemaphore(NULL, 0, 1, NULL));
 	}
 
+	threadCompActive = true; // Set to false when we want to stop the threads
+	tickThreads = new std::thread[threadNum];
+
+	// Give each thread a chunk to work on, then just start the threads.
+	// They will wait for the semaphores before doing the computation
 	std::vector<Tagent*>::iterator agentsBegin = this->agents.begin();
 	std::vector<Tagent*>::iterator start;
 	std::vector<Tagent*>::iterator end;
 	for (int tId = 0; tId < threadNum; tId++){
-		start = agentsBegin + chunks[tId] * tId;
-		end = start + chunks[tId];
+		start = agentsBegin + (*chunks)[tId] * tId;
+		end = start + (*chunks)[tId];
 		tickThreads[tId] = std::thread(&Ped::Model::computeAgentsInRange_version2, this, start, end, tId);
 	}
-
 }
 
+// Splits up the workload on N number of chunks where N is the number of threads in use
+void Ped::Model::chunkUp(){
+	int totalSize = this->agents.size();
+	int chunkSize = totalSize / threadNum;
+	int rest = totalSize % threadNum;
 
+	chunks = new std::vector<int>(threadNum, chunkSize);
+	for (int i = 0; i < rest; i++){
+		(*chunks)[i] += 1;
+	}
+}
 
 void Ped::Model::tick()
 {
 	// EDIT HERE FOR ASSIGNMENT 1
-
-	//this->implementation = SEQ;
 
 	switch (this->implementation){
 	case SEQ:
@@ -298,13 +311,26 @@ void Ped::Model::cleanup() {
 
 }
 
+void Ped::Model::killThreads(){
+	threadCompActive = false;
+	pthreadTick_ver2();
+	for (int t = 0; t < threadNum; t++){
+		tickThreads[t].join();
+	}
+
+	delete[] tickThreads;
+}
+
 Ped::Model::~Model()
 {
-	std::for_each(agents.begin(), agents.end(), [](Ped::Tagent *agent){delete agent;});
+	if (implementation == PTHREAD_2)
+		killThreads();
+
+	std::for_each(agents.begin(), agents.end(), [](Ped::Tagent *agent){delete agent; });
 	std::for_each(destinations.begin(), destinations.end(), [](Ped::Twaypoint *destination){delete destination; });
 
-	/*std::for_each(agentComputationSem.begin(), agentComputationSem.end(), [](HANDLE sem){CloseHandle(sem); });
+	std::for_each(agentComputationSem.begin(), agentComputationSem.end(), [](HANDLE sem){CloseHandle(sem); });
 	std::for_each(agentCompletionSem.begin(), agentCompletionSem.end(), [](HANDLE sem){CloseHandle(sem); });
 	
-	delete[] tickThreads;*/
+	delete chunks;
 }
