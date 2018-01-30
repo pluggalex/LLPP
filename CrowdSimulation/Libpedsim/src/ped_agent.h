@@ -26,6 +26,9 @@ namespace Ped {
 
 	class Tagent {
 	public:
+		static vector<int> positionsX;
+		static vector<int> positionsY;
+
 		Tagent(int posX, int posY);
 		Tagent(double posX, double posY);
 
@@ -47,6 +50,8 @@ namespace Ped {
 
 		// Adds a new waypoint to reach for this agent
 		void addWaypoint(Twaypoint* wp);
+
+
 
 	private:
 		Tagent() {};

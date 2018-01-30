@@ -52,6 +52,11 @@ namespace Ped{
 
 		void pthreadPrepTick();
 
+		void killThreads();
+
+		// Helper to split up the workload in chunks
+		void chunkUp();
+
 		// Go from iterator start to end and set X and Y for the agents in that range
 		void computeAgentsInRange(std::vector<Tagent*>::iterator, std::vector<Tagent*>::iterator);
 
@@ -95,6 +100,10 @@ namespace Ped{
 		std::thread* tickThreads;
 
 		int threadNum;
+
+		//chunks containing the workload for each thread
+		std::vector<int> *chunks;
+
 		// Moves an agent towards its next position
 		void move(Ped::Tagent *agent);
 

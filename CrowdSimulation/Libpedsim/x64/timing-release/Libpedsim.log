@@ -1,30 +1,26 @@
-﻿Build started 2018-01-22 22:40:58.
-     1>Project "C:\Users\alla7073\Downloads\Crowd - Joxa\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" on node 2 (Build target(s)).
+﻿Build started 2018-01-25 17:46:58.
+     1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D WIN64 /D NDEBUG /D _CONSOLE /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"x64\timing-release\\" /Fd"x64\timing-release\vc120.pdb" /Gd /TP /errorReport:prompt src\ped_model.cpp
-         ped_model.cpp
-     1>src\ped_model.cpp(72): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>src\ped_model.cpp(85): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>src\ped_model.cpp(118): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>src\ped_model.cpp(169): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D WIN64 /D NDEBUG /D _CONSOLE /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"x64\timing-release\\" /Fd"x64\timing-release\vc120.pdb" /Gd /TP /errorReport:prompt src\ped_agent.cpp
+         ped_agent.cpp
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\alla7073\Downloads\Crowd - Joxa\CrowdSimulation\x64\timing-release\Libpedsim.lib" /NOLOGO /MACHINE:X64 /LTCG "x64\timing-release\cuda_testkernel.cu.obj"
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\timing-release\Libpedsim.lib" /NOLOGO /MACHINE:X64 /LTCG "x64\timing-release\cuda_testkernel.cu.obj"
          "x64\timing-release\heatmap_seq.obj"
          "x64\timing-release\ped_agent.obj"
          "x64\timing-release\ped_model.obj"
          "x64\timing-release\ped_vector.obj"
          "x64\timing-release\ped_waypoint.obj"
-         Libpedsim.vcxproj -> C:\Users\alla7073\Downloads\Crowd - Joxa\CrowdSimulation\x64\timing-release\Libpedsim.lib
+         Libpedsim.vcxproj -> C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\timing-release\Libpedsim.lib
        PostBuildEvent:
-         echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\Crowd - Joxa\CrowdSimulation\x64\timing-release\"
-         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\Crowd - Joxa\CrowdSimulation\x64\timing-release\"
+         echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\timing-release\"
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\timing-release\"
          :VCEnd
-         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\Crowd - Joxa\CrowdSimulation\x64\timing-release\"
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\timing-release\"
          C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart32_75.dll
          C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart64_75.dll
                  2 file(s) copied.
-     1>Done Building Project "C:\Users\alla7073\Downloads\Crowd - Joxa\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.31
+Time Elapsed 00:00:00.88

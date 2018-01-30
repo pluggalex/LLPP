@@ -231,13 +231,19 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="src\cuda_testkernel.cu" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\coordinate_collection.cpp" />
+    <ClCompile Include="src\ped_agent_collection.cpp" />
     <ClCompile Include="src\heatmap_seq.cpp" />
     <ClCompile Include="src\ped_agent.cpp" />
     <ClCompile Include="src\ped_model.cpp" />
     <ClCompile Include="src\ped_vector.cpp" />
     <ClCompile Include="src\ped_waypoint.cpp" />
+    <ClCompile Include="src\ped_waipoints.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ped_waypoints.h" />
+    <ClInclude Include="src\ped_agent_collection.h" />
+    <ClInclude Include="src\ped_coordinate_collection.h" />
     <ClInclude Include="src\cuda_testkernel.h" />
     <ClInclude Include="src\ped_agent.h" />
     <ClInclude Include="src\ped_model.h" />

@@ -1,5 +1,5 @@
-﻿Build started 2018-01-22 22:40:59.
-     1>Project "C:\Users\alla7073\Downloads\Crowd - Joxa\CrowdSimulation\Demo\Demo.vcxproj" on node 2 (Build target(s)).
+﻿Build started 2018-01-25 17:46:59.
+     1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\Demo.vcxproj" on node 2 (Build target(s)).
      1>Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"timing-release\Demo\\Demo.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"..\x64\timing-release" /LIBPATH:"C:\Progra~1\NVIDIA~2\CUDA\v7.5\lib\x64" /LIBPATH:C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib libpedsim.lib Qt5PlatformSupport.lib "C:\Progra~1\NVIDIA~2\CUDA\v7.5\lib\x64\cudart.lib" C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5OpenGL.lib C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Widgets.lib C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Gui.lib C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Core.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST:NO /PDB:"timing-release\Demo\Demo.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /MACHINE:X64 "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" release\MainWindow.obj
          release\ParseScenario.obj
@@ -12,9 +12,9 @@
             Creating library timing-release\Demo\\Demo.lib and object timing-release\Demo\\Demo.exp
          Generating code
          Finished generating code
-         Demo.vcxproj -> C:\Users\alla7073\Downloads\Crowd - Joxa\CrowdSimulation\Demo\timing-release\Demo\Demo.exe
-     1>Done Building Project "C:\Users\alla7073\Downloads\Crowd - Joxa\CrowdSimulation\Demo\Demo.vcxproj" (Build target(s)).
+         Demo.vcxproj -> C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\timing-release\Demo\Demo.exe
+     1>Done Building Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\Demo.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.61
+Time Elapsed 00:00:00.93

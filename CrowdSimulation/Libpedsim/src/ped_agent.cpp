@@ -17,6 +17,9 @@
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
 
+std::vector<int> Ped::Tagent::positionsX;
+std::vector<int> Ped::Tagent::positionsY;
+
 Ped::Tagent::Tagent(int posX, int posY) {
 	Ped::Tagent::init(posX, posY);
 }
@@ -28,8 +31,9 @@ Ped::Tagent::Tagent(double posX, double posY) {
 void Ped::Tagent::init(int posX, int posY) {
 	x = posX;
 	y = posY;
+	
 	destination = NULL;
-	lastDestination = NULL;
+	//lastDestination = NULL;
 }
 
 void Ped::Tagent::computeNextDesiredPosition() {
@@ -40,11 +44,11 @@ void Ped::Tagent::computeNextDesiredPosition() {
 		return;
 	}
 
-	double diffX = destination->getx() - x;
-	double diffY = destination->gety() - y;
+	double diffX = destination->getx() - getX();
+	double diffY = destination->gety() - getY();
 	double len = sqrt(diffX * diffX + diffY * diffY);
-	desiredPositionX = (int)round(x + diffX / len);
-	desiredPositionY = (int)round(y + diffY / len);
+	desiredPositionX = (int)round(getX() + diffX / len);
+	desiredPositionY = (int)round(getY() + diffY / len);
 }
 
 void Ped::Tagent::addWaypoint(Twaypoint* wp) {
@@ -57,8 +61,8 @@ Ped::Twaypoint* Ped::Tagent::getNextDestination() {
 
 	if (destination != NULL) {
 		// compute if agent reached its current destination
-		double diffX = destination->getx() - x;
-		double diffY = destination->gety() - y;
+		double diffX = destination->getx() - getX();
+		double diffY = destination->gety() - getY();
 		double length = sqrt(diffX * diffX + diffY * diffY);
 		agentReachedDestination = length < destination->getr();
 	}
