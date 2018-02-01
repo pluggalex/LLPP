@@ -77,7 +77,6 @@ void Ped::Model::ompTick(){
 	}
 }
 
-/
 /*
 *	OpenMP version of tic()
 *	Chunks are already divided and the work to be done
@@ -312,6 +311,16 @@ void Ped::Model::killThreads(){
 	// Join up and delete the threads
 	for (int t = 0; t < threadNum; t++){
 		tickThreads[t].join();//
+	}
+
+	delete[] tickThreads;
+}
+
+void Ped::Model::killThreads(){
+	threadCompActive = false;
+	pthreadTick_ver2();
+	for (int t = 0; t < threadNum; t++){
+		tickThreads[t].join();
 	}
 
 	delete[] tickThreads;

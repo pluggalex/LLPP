@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿Build started 2018-02-01 18:09:58.
      1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" on node 2 (Rebuild target(s)).
      1>CudaClean:
@@ -107,12 +108,27 @@
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\Libpedsim.lib" /NOLOGO /MACHINE:X64 x64\Debug\cuda_testkernel.cu.obj
          x64\Debug\ped_agent_collection.obj
+=======
+﻿Build started 2018-01-25 17:19:43.
+     1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D WIN64 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt src\ped_model.cpp
+         ped_model.cpp
+     1>src\ped_model.cpp(71): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(114): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(196): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\Libpedsim.lib" /NOLOGO /MACHINE:X64 x64\Debug\cuda_testkernel.cu.obj
+>>>>>>> 8beaaf3319ccd32730ed94c450b9e815b7409948
          x64\Debug\heatmap_seq.obj
          x64\Debug\ped_agent.obj
          x64\Debug\ped_model.obj
          x64\Debug\ped_vector.obj
          x64\Debug\ped_waypoint.obj
+<<<<<<< HEAD
          x64\Debug\ped_waipoints.obj
+=======
+>>>>>>> 8beaaf3319ccd32730ed94c450b9e815b7409948
          Libpedsim.vcxproj -> C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\Libpedsim.lib
        PostBuildEvent:
          echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\"
@@ -122,8 +138,16 @@
          C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart32_75.dll
          C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart64_75.dll
                  2 file(s) copied.
+<<<<<<< HEAD
      1>Done Building Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
 Time Elapsed 00:00:08.73
+=======
+     1>Done Building Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.33
+>>>>>>> 8beaaf3319ccd32730ed94c450b9e815b7409948

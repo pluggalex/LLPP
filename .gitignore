@@ -1,2 +1,4 @@
 *.obj
 *.sdf
+*.exe
+*.log
