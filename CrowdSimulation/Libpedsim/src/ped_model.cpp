@@ -23,16 +23,16 @@
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
 
-void Ped::Model::setup(std::vector<Ped::Tagent*> agentsInScenario, std::vector<Twaypoint*> destinationsInScenario)
+void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 {
 	// Convenience test: does CUDA work on this machine?
 	cuda_test();
 
 	// Set 
-	agents = std::vector<Ped::Tagent*>(agentsInScenario.begin(), agentsInScenario.end());
+	agentCollection = std::move(_agentCollection);
 
 	// Set up destinations
-	destinations = std::vector<Ped::Twaypoint*>(destinationsInScenario.begin(), destinationsInScenario.end());
+	//destinations = std::vector<Ped::Twaypoint*>(destinationsInScenario.begin(), destinationsInScenario.end());
 
 	// This is the sequential implementation
 	implementation = PTHREAD_2;
@@ -55,11 +55,8 @@ void Ped::Model::setup(std::vector<Ped::Tagent*> agentsInScenario, std::vector<T
 
 // Sequential tick..
 void Ped::Model::seqTick(){
-	for (auto agent : this->agents){
-		agent->computeNextDesiredPosition();
-		agent->setX(agent->getDesiredX());
-		agent->setY(agent->getDesiredY());
-	}
+	agentCollection->computeNextDesiredPositionScalar(0, agentCollection->size());
+	agentCollection->updateFromDesired(0, agentCollection->size());
 }
 
 
@@ -68,7 +65,7 @@ void Ped::Model::seqTick(){
 *	Simpler version where the workload is chunked up by OpenMP
 */
 void Ped::Model::ompTick(){
-	int size = this->agents.size();
+	int size = this->agentCollection->size();
 
 	#pragma omp parallel for 
 	for (int i = 0; i < size; i++){
@@ -100,7 +97,7 @@ void Ped::Model::ompTick_ver2(){
 }
 
 /* old thread version*/
-
+/*
 void Ped::Model::computeAgentsInRange(std::vector<Tagent*>::iterator current, std::vector<Tagent*>::iterator end){
 	for (current; current < end; current++){
 		(*current)->computeNextDesiredPosition();
@@ -129,7 +126,7 @@ void Ped::Model::pthreadTick(){
 		tickThreads[t] = std::thread(&Ped::Model::computeAgentsInRange, this, start, end);
 	}
 }
-
+*/
 
 
 /* 
@@ -329,8 +326,8 @@ Ped::Model::~Model()
 	if (implementation == PTHREAD_2)
 		killThreads();
 
-	std::for_each(agents.begin(), agents.end(), [](Ped::Tagent *agent){delete agent; });
-	std::for_each(destinations.begin(), destinations.end(), [](Ped::Twaypoint *destination){delete destination; });
+	//std::for_each(agents.begin(), agents.end(), [](Ped::Tagent *agent){delete agent; });
+	//std::for_each(destinations.begin(), destinations.end(), [](Ped::Twaypoint *destination){delete destination; });
 
 	std::for_each(agentComputationSem.begin(), agentComputationSem.end(), [](HANDLE sem){CloseHandle(sem); });
 	std::for_each(agentCompletionSem.begin(), agentCompletionSem.end(), [](HANDLE sem){CloseHandle(sem); });

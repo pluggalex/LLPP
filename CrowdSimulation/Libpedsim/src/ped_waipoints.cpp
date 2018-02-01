@@ -2,6 +2,7 @@
 // Adapted for Low Level Parallel Programming 2017
 //
 #include "ped_waypoints.h"
+#include <algorithm>
 
 #include <cmath>
 
@@ -21,17 +22,34 @@ Ped::waypoints::waypoints() : agents(0), waypointX(0), waypointY(0), waypointR(0
 
 Ped::waypoints::~waypoints() {};
 
+
+// We will begin to assume the given range is covering all the agents..
 void Ped::waypoints::addWaypoint(Ped::Twaypoint* waypoint, int start, int end){
-	int size = waypointX.size();
+	
 	//Create space for another waypoint in the vectors
 	waypointX.push_back(std::vector<int>(agents, NULL));
 	waypointY.push_back(std::vector<int>(agents, NULL));
 	waypointR.push_back(std::vector<int>(agents, NULL));
 
+	int size = waypointX.size() - 1;
 	//Fille the empty waypoint space with coordinates
-	std::fill(waypointX[size - 1].begin() + start, waypointX[size - 1].begin() + end, waypoint->getx());
-	std::fill(waypointY[size - 1].begin() + start, waypointY[size - 1].begin() + end, waypoint->gety());
-	std::fill(waypointR[size - 1].begin() + start, waypointR[size - 1].begin() + end, waypoint->getr());
+	std::fill(waypointX[size].begin() + start, waypointX[size].begin() + end, waypoint->getx());
+	std::fill(waypointY[size].begin() + start, waypointY[size].begin() + end, waypoint->gety());
+	std::fill(waypointR[size].begin() + start, waypointR[size].begin() + end, waypoint->getr());
 }
 
+// TODO
+// Make sure that the nullvalues gets handled somehow
+void bubbleToBack(int agent, std::vector<std::vector<int>>& waypointQueue){
+	for (int i = 0; i < waypointQueue.size()-1; i++){
+		std::swap(waypointQueue[i].begin() + agent, waypointQueue[i+1].begin() + agent);
+	}
+}
 
+//Takes an index representing an agent and sends the
+//first waypoint for that agent to the back
+void Ped::waypoints::rotateQueue(int agent){
+	bubbleToBack(agent, waypointX);
+	bubbleToBack(agent, waypointY);
+	bubbleToBack(agent, waypointR);
+}

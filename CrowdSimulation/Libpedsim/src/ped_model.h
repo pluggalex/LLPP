@@ -16,8 +16,9 @@
 #include <set>
 #include <Windows.h>
 #include <thread>
+#include <memory>
 
-#include "ped_agent.h"
+#include "ped_agent_collection.h"
 
 namespace Ped{
 	class Tagent;
@@ -31,7 +32,7 @@ namespace Ped{
 	public:
 
 		// Sets everything up
-		void setup(std::vector<Tagent*> agentsInScenario, std::vector<Twaypoint*> destinationsInScenario);
+		void setup(std::unique_ptr<Tagent_collection> agent_collection);
 
 		// Coordinates a time step in the scenario: move all agents by one step (if applicable).
 		void tick();
@@ -86,7 +87,7 @@ namespace Ped{
 		IMPLEMENTATION implementation;
 
 		// The agents in this scenario
-		std::vector<Tagent*> agents;
+		std::unique_ptr<Tagent_collection> agentCollection;
 
 		// The waypoints in this scenario
 		std::vector<Twaypoint*> destinations;

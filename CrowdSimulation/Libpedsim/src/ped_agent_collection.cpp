@@ -5,11 +5,10 @@
 //
 // Adapted for Low Level Parallel Programming 2017
 //
-#include "ped_agent_collection.h"
-#include "ped_waypoints.h"
-#include "ped_waypoint.h"
+
 #include <math.h>
 #include <algorithm>
+#include "ped_agent_collection.h"
 
 // Memory leak check with msvc++
 #define _CRTDBG_MAP_ALLOC
@@ -21,7 +20,7 @@
 
 Ped::Tagent_collection::Tagent_collection() {destinations = new Ped::waypoints(); }
 
-void Ped::Tagent_collection::add_agent(int posX, int posY){
+void Ped::Tagent_collection::addAgent(int posX, int posY){
 	x.push_back(posX);
 	y.push_back(posY);
 }
@@ -30,59 +29,57 @@ void Ped::Tagent_collection::add_agent(int posX, int posY){
 // TODO 
 // Setters and getters
 // -----------------------------------
-void Ped::Tagent_collection::setX(int newX){}
-void Ped::Tagent_collection::setY(int newY){}
+//void Ped::Tagent_collection::setX(int newX){}
+//void Ped::Tagent_collection::setY(int newY){}
 
-std::vector<int> Ped::Tagent_collection::getDesiredX(){}
-std::vector<int> Ped::Tagent_collection::getDesiredY(){}
+//std::vector<int> Ped::Tagent_collection::getDesiredX(){}
+//std::vector<int> Ped::Tagent_collection::getDesiredY(){}
 //------------------------------------
 
+
+void Ped::Tagent_collection::updateFromDesired(int start, int end){
+	std::copy(desiredPositionX.begin() + start, desiredPositionX.begin()+end, x.begin()+start);
+	std::copy(desiredPositionY.begin() + start, desiredPositionY.begin() + end, y.begin() + start);
+}
 
 
 void Ped::Tagent_collection::computeNextDesiredPositionScalar(int start, int end) {
 
+	setNextDestinationScalar(start, end);
 
 	for (int index = start; index < end; index++){
-		getNextDestinationScalar(index);
+		double diffX = destinations->getx()[index] - x[index];
+		double diffY = destinations->gety()[index] - y[index];
+		double len = sqrt(diffX * diffX + diffY * diffY);
 
-		if (!(*destination->getx())[0].empty() && (*destination->getx())[0][index] != NULL) {
-			double diffX = (*destination->getx())[index] - x[index];
-			double diffY = (*destination->gety())[index] - y[index];
-			double len = sqrt(diffX * diffX + diffY * diffY);
+		if (len < destinations->getr()[index]){
+			destinations->rotateQueue(index);
+		}
+		else{
 			desiredPositionX[index] = (int)round(x[index] + diffX / len);
 			desiredPositionY[index] = (int)round(y[index] + diffY / len);
+		}
 	}
 }
 
-void Ped::Tagent_collection::addWaypoint(Twaypoint* wp, int start_agent, int end_agent) {
-	destinations->addWaypoint(wp, );
-
+void Ped::Tagent_collection::addWaypoint(Twaypoint* wp) {
+	destinations->addWaypoint(wp, 0, x.size());
 }
 
-Ped::Twaypoint* Ped::Tagent_collection::getNextDestinationScalar(int index) {
-	Ped::Twaypoint* nextDestination = NULL;
-	bool agentReachedDestination = false;
 
-	if (destination->x[index] != NULL) {
+/*
+* Potentially not needed, maybe :)
+*/
+void Ped::Tagent_collection::setNextDestinationScalar(int start, int end) {
+	int agentReachedDestination;
+	for (int i = start; i < end; i++){
 		// compute if agent reached its current destination
-		double diffX = *(destination->getx())[index] - x[index];
-		double diffY = *(destination->gety())[index] - y[index];
+		double diffX = destinations->getx()[i] - x[i];
+		double diffY = destinations->gety()[i] - y[i];
 		double length = sqrt(diffX * diffX + diffY * diffY);
-		agentReachedDestination = length < *(destination->getr())[index];
-	}
+		agentReachedDestination = length < destinations->getr()[i];
 
-	if ((agentReachedDestination || destination == NULL) && !waypoints.empty()) {
-		// Case 1: agent has reached destination (or has no current destination);
-		// get next destination if available
-		waypoints.push_back(destination);
-		nextDestination = waypoints.front();
-		waypoints.pop_front();
+		if (agentReachedDestination)
+			destinations->rotateQueue(i);
 	}
-	else {
-		// Case 2: agent has not yet reached destination, continue to move towards
-		// current destination
-		nextDestination = destination;
-	}
-
-	return nextDestination;
 }

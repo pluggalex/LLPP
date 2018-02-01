@@ -39,17 +39,20 @@ namespace Ped {
 
 		int getid() const { return id; };
 		*/
-		std::vector<std::vector<int>>& getx() { return waypointX; };
-		std::vector<std::vector<int>>& gety() { return waypointY; };
-		std::vector<std::vector<int>>& getr() { return waypointR; };
+		std::vector<int>& getx() { return waypointX.front(); };
+		std::vector<int>& gety() { return waypointY.front(); };
+		std::vector<int>& getr() { return waypointR.front(); };
 		
 		//Range of agents
 		void addWaypoint(Ped::Twaypoint* waypoint, int start, int end);
 
 		//Add waypoint for single agent
-		void addWaypoint(Ped::Twaypoint* waypoint, int start, int end);
+		//void addWaypoint(Ped::Twaypoint* waypoint, int start, int end);
 
-		void rollQueue(int index);
+		//Sends the first waypoint for the given agent to the back of the queue
+		//by swaping each element on the way, effectivly 'bubbling' down the waypoint
+		void rotateQueue(int agent);
+
 
 	private:
 		

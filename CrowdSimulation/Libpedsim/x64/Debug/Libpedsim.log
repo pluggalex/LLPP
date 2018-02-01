@@ -1,118 +1,98 @@
-﻿Build started 2018-01-29 14:33:07.
-     1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D WIN64 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt src\coordinate_collection.cpp src\ped_agent_collection.cpp src\ped_waipoints.cpp
+﻿Build started 2018-01-31 18:47:12.
+     1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" on node 2 (Rebuild target(s)).
+     1>CudaClean:
+         cmd.exe /C "C:\Users\alla7073\AppData\Local\Temp\tmpc4ab04276816488cb724d7b4d9f52942.cmd"
+         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile   -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu" -clean
+         
+         C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile   -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu" -clean 
+         cuda_testkernel.cu
+       AddCudaCompileDeps:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /DWIN64 /D_DEBUG /D_CONSOLE /D_MBCS /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I. /FIcuda_runtime.h /c C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu 
+       CudaBuild:
+         Compiling CUDA source file src\cuda_testkernel.cu...
+         cmd.exe /C "C:\Users\alla7073\AppData\Local\Temp\tmpbf9a22a36899437f9bf182a9bf4f4fb3.cmd"
+         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu"
+         
+         C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu" 
+         cuda_testkernel.cu
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D WIN64 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt src\ped_agent_collection.cpp src\heatmap_seq.cpp src\ped_agent.cpp src\ped_model.cpp src\ped_vector.cpp src\ped_waypoint.cpp src\ped_waipoints.cpp
          ped_waipoints.cpp
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(67): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(61): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
                  with
                  [
                      _Ty=int
                  ]
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(68): warning C4251: 'Ped::waypoints::waypointY' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(62): warning C4251: 'Ped::waypoints::waypointY' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
                  with
                  [
                      _Ty=int
                  ]
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(69): warning C4251: 'Ped::waypoints::waypointR' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(63): warning C4251: 'Ped::waypoints::waypointR' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
                  with
                  [
                      _Ty=int
                  ]
-     1>src\ped_waipoints.cpp(31): error C2039: 'getX' : is not a member of 'Ped::Twaypoint'
-                 c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoint.h(26) : see declaration of 'Ped::Twaypoint'
-     1>src\ped_waipoints.cpp(31): error C2780: 'void std::fill(_FwdIt,_FwdIt,const _Ty &)' : expects 3 arguments - 2 provided
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xutility(2620) : see declaration of 'std::fill'
-     1>src\ped_waipoints.cpp(32): error C2039: 'getY' : is not a member of 'Ped::Twaypoint'
-                 c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoint.h(26) : see declaration of 'Ped::Twaypoint'
-     1>src\ped_waipoints.cpp(32): error C2780: 'void std::fill(_FwdIt,_FwdIt,const _Ty &)' : expects 3 arguments - 2 provided
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xutility(2620) : see declaration of 'std::fill'
-     1>src\ped_waipoints.cpp(33): error C2039: 'getR' : is not a member of 'Ped::Twaypoint'
-                 c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoint.h(26) : see declaration of 'Ped::Twaypoint'
-     1>src\ped_waipoints.cpp(33): error C2780: 'void std::fill(_FwdIt,_FwdIt,const _Ty &)' : expects 3 arguments - 2 provided
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xutility(2620) : see declaration of 'std::fill'
+     1>src\ped_waipoints.cpp(34): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xutility(2600): warning C4244: '=' : conversion from 'const double' to 'int', possible loss of data
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xutility(2623) : see reference to function template instantiation 'void std::_Fill<int*,_Ty>(_FwdIt,_FwdIt,const _Ty &)' being compiled
+                 with
+                 [
+                     _Ty=double
+         ,            _FwdIt=int *
+                 ]
+                 src\ped_waipoints.cpp(36) : see reference to function template instantiation 'void std::fill<std::_Vector_iterator<std::_Vector_val<std::_Simple_types<int>>>,double>(_FwdIt,_FwdIt,const _Ty &)' being compiled
+                 with
+                 [
+                     _FwdIt=std::_Vector_iterator<std::_Vector_val<std::_Simple_types<int>>>
+         ,            _Ty=double
+                 ]
+         ped_waypoint.cpp
+         ped_vector.cpp
+         ped_model.cpp
+     1>src\ped_model.cpp(71): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(114): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(196): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+         ped_agent.cpp
+         heatmap_seq.cpp
          ped_agent_collection.cpp
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(59): error C2535: 'Ped::Tagent_collection::Tagent_collection(void)' : member function already defined or declared
-                 c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(30) : see declaration of 'Ped::Tagent_collection::Tagent_collection'
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(67): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(61): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
                  with
                  [
                      _Ty=int
                  ]
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(68): warning C4251: 'Ped::waypoints::waypointY' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(62): warning C4251: 'Ped::waypoints::waypointY' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
                  with
                  [
                      _Ty=int
                  ]
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(69): warning C4251: 'Ped::waypoints::waypointR' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(63): warning C4251: 'Ped::waypoints::waypointR' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
                  with
                  [
                      _Ty=int
                  ]
-     1>src\ped_agent_collection.cpp(27): error C2065: 'destination' : undeclared identifier
-     1>src\ped_agent_collection.cpp(27): error C2227: left of '->getx' must point to class/struct/union/generic type
-                 type is 'unknown-type'
-     1>src\ped_agent_collection.cpp(27): error C2228: left of '.empty' must have class/struct/union
-     1>src\ped_agent_collection.cpp(28): error C2065: 'destination' : undeclared identifier
-     1>src\ped_agent_collection.cpp(28): error C2227: left of '->getx' must point to class/struct/union/generic type
-                 type is 'unknown-type'
-     1>src\ped_agent_collection.cpp(28): error C2228: left of '.push_back' must have class/struct/union
-     1>src\ped_agent_collection.cpp(29): error C2065: 'destination' : undeclared identifier
-     1>src\ped_agent_collection.cpp(29): error C2227: left of '->gety' must point to class/struct/union/generic type
-                 type is 'unknown-type'
-     1>src\ped_agent_collection.cpp(29): error C2228: left of '.push_back' must have class/struct/union
-     1>src\ped_agent_collection.cpp(30): error C2065: 'destination' : undeclared identifier
-     1>src\ped_agent_collection.cpp(30): error C2227: left of '->getr' must point to class/struct/union/generic type
-                 type is 'unknown-type'
-     1>src\ped_agent_collection.cpp(30): error C2228: left of '.push_back' must have class/struct/union
-     1>src\ped_agent_collection.cpp(32): error C2065: 'destination' : undeclared identifier
-     1>src\ped_agent_collection.cpp(32): error C2227: left of '->getx' must point to class/struct/union/generic type
-                 type is 'unknown-type'
-     1>src\ped_agent_collection.cpp(32): error C2228: left of '.push_back' must have class/struct/union
-     1>src\ped_agent_collection.cpp(33): error C2065: 'destination' : undeclared identifier
-     1>src\ped_agent_collection.cpp(33): error C2227: left of '->gety' must point to class/struct/union/generic type
-                 type is 'unknown-type'
-     1>src\ped_agent_collection.cpp(33): error C2228: left of '.push_back' must have class/struct/union
-     1>src\ped_agent_collection.cpp(34): error C2065: 'destination' : undeclared identifier
-     1>src\ped_agent_collection.cpp(34): error C2227: left of '->getr' must point to class/struct/union/generic type
-                 type is 'unknown-type'
-     1>src\ped_agent_collection.cpp(34): error C2228: left of '.push_back' must have class/struct/union
-     1>src\ped_agent_collection.cpp(56): error C2065: 'destination' : undeclared identifier
-     1>src\ped_agent_collection.cpp(56): error C2227: left of '->getx' must point to class/struct/union/generic type
-                 type is 'unknown-type'
-     1>src\ped_agent_collection.cpp(56): error C2228: left of '.empty' must have class/struct/union
-     1>src\ped_agent_collection.cpp(57): error C2065: 'destination' : undeclared identifier
-     1>src\ped_agent_collection.cpp(57): error C2227: left of '->getx' must point to class/struct/union/generic type
-                 type is 'unknown-type'
-     1>src\ped_agent_collection.cpp(58): error C2065: 'destination' : undeclared identifier
-     1>src\ped_agent_collection.cpp(58): error C2227: left of '->gety' must point to class/struct/union/generic type
-                 type is 'unknown-type'
-     1>src\ped_agent_collection.cpp(65): error C2601: 'Ped::Tagent_collection::addWaypoint' : local function definitions are illegal
-                 src\ped_agent_collection.cpp(50): this line contains a '{' which has not yet been matched
-     1>src\ped_agent_collection.cpp(69): error C2556: 'Ped::Twaypoint *Ped::Tagent_collection::getNextDestinationScalar(int)' : overloaded function differs only by return type from 'void Ped::Tagent_collection::getNextDestinationScalar(int)'
-                 c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(86) : see declaration of 'Ped::Tagent_collection::getNextDestinationScalar'
-     1>src\ped_agent_collection.cpp(69): error C2373: 'Ped::Tagent_collection::getNextDestinationScalar' : redefinition; different type modifiers
-                 c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(86) : see declaration of 'Ped::Tagent_collection::getNextDestinationScalar'
-     1>src\ped_agent_collection.cpp(69): error C2333: 'Ped::Tagent_collection::getNextDestinationScalar' : error in function declaration; skipping function body
-     1>src\ped_agent_collection.cpp(96): fatal error C1075: end of file found before the left brace '{' at 'src\ped_agent_collection.cpp(50)' was matched
-         coordinate_collection.cpp
-     1>src\coordinate_collection.cpp(20): error C2228: left of '.push_back' must have class/struct/union
-                 type is 'std::vector<int,std::allocator<_Ty>> *'
-                 with
-                 [
-                     _Ty=int
-                 ]
-                 did you intend to use '->' instead?
-     1>src\coordinate_collection.cpp(23): error C2440: 'initializing' : cannot convert from 'int' to 'std::vector<int,std::allocator<_Ty>> *'
-                 with
-                 [
-                     _Ty=int
-                 ]
-                 Conversion from integral type to pointer type requires reinterpret_cast, C-style cast or function-style cast
-     1>src\coordinate_collection.cpp(23): error C2439: 'Ped::coordinate_collection::r' : member could not be initialized
-                 c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_coordinate_collection.h(59) : see declaration of 'Ped::coordinate_collection::r'
+     1>src\ped_agent_collection.cpp(66): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
          Generating Code...
-     1>Done Building Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" (Build target(s)) -- FAILED.
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\Libpedsim.lib" /NOLOGO /MACHINE:X64 x64\Debug\cuda_testkernel.cu.obj
+         x64\Debug\ped_agent_collection.obj
+         x64\Debug\heatmap_seq.obj
+         x64\Debug\ped_agent.obj
+         x64\Debug\ped_model.obj
+         x64\Debug\ped_vector.obj
+         x64\Debug\ped_waypoint.obj
+         x64\Debug\ped_waipoints.obj
+         Libpedsim.vcxproj -> C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\Libpedsim.lib
+       PostBuildEvent:
+         echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\"
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\"
+         :VCEnd
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\"
+         C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart32_75.dll
+         C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart64_75.dll
+                 2 file(s) copied.
+     1>Done Building Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" (Rebuild target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:00.67
+Time Elapsed 00:00:09.00

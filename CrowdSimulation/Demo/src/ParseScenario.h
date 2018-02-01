@@ -10,6 +10,7 @@
 #define _parsescenario_h_
 
 #include "ped_agent.h"
+#include "ped_agent_collection.h"
 #include "ped_waypoint.h"
 #include <QtCore>
 #include <QXmlStreamReader>
@@ -37,6 +38,7 @@ private:
 
 	// final collection of all created agents
 	vector<Ped::Tagent*> agents;
+	
 
 	// temporary collection of agents used to
 	// keep track of all agents that are generated
