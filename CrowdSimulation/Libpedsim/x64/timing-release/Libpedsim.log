@@ -1,15 +1,33 @@
-﻿Build started 2018-01-25 17:46:58.
+﻿Build started 2018-02-01 18:08:11.
      1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D WIN64 /D NDEBUG /D _CONSOLE /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"x64\timing-release\\" /Fd"x64\timing-release\vc120.pdb" /Gd /TP /errorReport:prompt src\ped_agent.cpp
-         ped_agent.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D WIN64 /D NDEBUG /D _CONSOLE /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"x64\timing-release\\" /Fd"x64\timing-release\vc120.pdb" /Gd /TP /errorReport:prompt src\ped_model.cpp
+         ped_model.cpp
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(70): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=int
+                 ]
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(71): warning C4251: 'Ped::waypoints::waypointY' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=int
+                 ]
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(72): warning C4251: 'Ped::waypoints::waypointR' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=int
+                 ]
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\timing-release\Libpedsim.lib" /NOLOGO /MACHINE:X64 /LTCG "x64\timing-release\cuda_testkernel.cu.obj"
+         "x64\timing-release\ped_agent_collection.obj"
          "x64\timing-release\heatmap_seq.obj"
          "x64\timing-release\ped_agent.obj"
          "x64\timing-release\ped_model.obj"
          "x64\timing-release\ped_vector.obj"
          "x64\timing-release\ped_waypoint.obj"
+         "x64\timing-release\ped_waipoints.obj"
          Libpedsim.vcxproj -> C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\timing-release\Libpedsim.lib
        PostBuildEvent:
          echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\cudart*.dll" "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\timing-release\"
@@ -23,4 +41,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.88
+Time Elapsed 00:00:01.22

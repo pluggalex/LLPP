@@ -52,8 +52,10 @@ namespace Ped {
 
 		// Position of agent defined by x and y
 		// TODO
-		std::vector<int> getX() const { return x; };
-		std::vector<int> getY() const { return y; };
+		std::vector<int> getX() const { return x; }
+		std::vector<int> getY() const { return y; }
+		std::vector<int> getDesiredX() const { return desiredPositionX; }
+		std::vector<int> getDesiredY() const { return desiredPositionY; }
 		Ped::waypoints* borrowDestinations() const { return destinations.get(); }
 
 		// Add a new waypoint for every agent
@@ -61,7 +63,7 @@ namespace Ped {
 
 		void addAgent(int x, int y);
 
-		Ped::Tagent_collection operator+=(const Ped::Tagent_collection& rhs);
+		Ped::Tagent_collection& operator+=(const Ped::Tagent_collection& rhs);
 
 
 	private:

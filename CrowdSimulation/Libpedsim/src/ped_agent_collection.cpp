@@ -18,11 +18,15 @@
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
 
-Ped::Tagent_collection::Tagent_collection() {destinations = std::make_unique<Ped::waypoints>(); }
+Ped::Tagent_collection::Tagent_collection() : x(0), y(0) {destinations = std::make_unique<Ped::waypoints>(); }
 
 void Ped::Tagent_collection::addAgent(int posX, int posY){
 	x.push_back(posX);
 	y.push_back(posY);
+	desiredPositionX.push_back(posX);
+	desiredPositionY.push_back(posY);
+
+	destinations->setAgents(x.size());
 }
 
 
@@ -45,7 +49,7 @@ void Ped::Tagent_collection::updateFromDesired(int start, int end){
 
 void Ped::Tagent_collection::computeNextDesiredPositionScalar(int start, int end) {
 
-	setNextDestinationScalar(start, end);
+	//setNextDestinationScalar(start, end);
 
 	for (int index = start; index < end; index++){
 		double diffX = destinations->getDestRefX()[index] - x[index];
@@ -67,13 +71,18 @@ void Ped::Tagent_collection::addWaypoint(Twaypoint* wp) {
 }
 
 
-Ped::Tagent_collection Ped::Tagent_collection::operator += (const Ped::Tagent_collection& rhs){
+Ped::Tagent_collection& Ped::Tagent_collection::operator += (const Ped::Tagent_collection& rhs){
 	std::vector<int> rhsX = rhs.getX();
 	std::vector<int> rhsY = rhs.getY();
-	Ped::waypoints* rhsDest = rhs.borrowDestinations();
-	std::copy(rhsX.begin(), rhsX.end(), x.end());
-	std::copy(rhsY.begin(), rhsY.end(), y.end());
+	x.insert(x.end(), rhsX.begin(), rhsX.end());
+	y.insert(y.end(), rhsY.begin(), rhsY.end());
 	
+	std::vector<int> desiredX = rhs.getDesiredX();
+	std::vector<int> desiredY = rhs.getDesiredY();
+	desiredPositionX.insert(desiredPositionX.end(), desiredX.begin(), desiredX.end());
+	desiredPositionY.insert(desiredPositionY.end(), desiredY.begin(), desiredY.end());
+
+	Ped::waypoints* rhsDest = rhs.borrowDestinations();
 	*destinations += *rhsDest;
 
 	return *this;
@@ -86,10 +95,10 @@ void Ped::Tagent_collection::setNextDestinationScalar(int start, int end) {
 	int agentReachedDestination;
 	for (int i = start; i < end; i++){
 		// compute if agent reached its current destination
-		double diffX = destinations->getx()[i] - x[i];
-		double diffY = destinations->gety()[i] - y[i];
+		double diffX = destinations->getDestRefX()[i] - x[i];
+		double diffY = destinations->getDestRefY()[i] - y[i];
 		double length = sqrt(diffX * diffX + diffY * diffY);
-		agentReachedDestination = length < destinations->getr()[i];
+		agentReachedDestination = length < destinations->getDestRefR()[i];
 
 		if (agentReachedDestination)
 			destinations->rotateQueue(i);

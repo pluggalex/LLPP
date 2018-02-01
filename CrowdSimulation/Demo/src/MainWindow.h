@@ -30,7 +30,7 @@ private:
 	const Ped::Model &model;
 
 	// the graphical representation of each agent
-	std::vector<ViewAgent*> viewAgents;
+	ViewAgent* viewAgent;
 
 	// The pixelmap containing the heatmap image (Assignment 4)
 	QGraphicsPixmapItem *pixmap;

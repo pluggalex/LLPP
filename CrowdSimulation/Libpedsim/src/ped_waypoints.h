@@ -39,6 +39,8 @@ namespace Ped {
 
 		int getid() const { return id; };
 		*/
+		void setAgents(int amount){ agents = amount; }
+
 		std::vector<int>& getDestRefX() { return waypointX.front(); };
 		std::vector<int>& getDestRefY() { return waypointY.front(); };
 		std::vector<int>& getDestRefR() { return waypointR.front(); };
@@ -57,8 +59,9 @@ namespace Ped {
 		//by swaping each element on the way, effectivly 'bubbling' down the waypoint
 		void rotateQueue(int agent);
 
+		
 
-		Ped::waypoints operator+=(const Ped::waypoints& rhs);
+		waypoints& operator+=(const Ped::waypoints& rhs);
 
 	private:
 		

@@ -65,7 +65,7 @@ namespace Ped{
 		void computeAgentsInRange_version2(int start, int end, int tId);
 		
 		// Returns the agents of this scenario
-		//const std::vector<Tagent*> getAgents() const { return agents; };
+		std::shared_ptr<Ped::Tagent_collection> getAgents() const { return agentCollection; }
 
 		// Adds an agent to the tree structure
 		//void placeAgent(const Ped::Tagent *a);
@@ -87,7 +87,7 @@ namespace Ped{
 		IMPLEMENTATION implementation;
 
 		// The agents in this scenario
-		std::unique_ptr<Tagent_collection> agentCollection;
+		std::shared_ptr<Tagent_collection> agentCollection;
 
 		// The waypoints in this scenario
 		std::vector<Twaypoint*> destinations;
@@ -134,7 +134,7 @@ namespace Ped{
 		int ** blurred_heatmap;
 
 		void setupHeatmapSeq();
-		void updateHeatmapSeq();
+		//void updateHeatmapSeq();
 	};
 }
 #endif

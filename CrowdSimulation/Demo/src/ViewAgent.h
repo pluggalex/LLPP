@@ -8,19 +8,20 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
-#include "ped_agent.h"
+#include <vector>
+#include "ped_agent_collection.h"
 
 class ViewAgent{
 public:
-	ViewAgent(Ped::Tagent * agent, QGraphicsScene * scene);
-	void paint(QColor color);
-	const std::pair<int, int> getPosition();
+	ViewAgent(std::shared_ptr<Ped::Tagent_collection> agent, QGraphicsScene * scene);
+	void paint(std::vector<QColor> colors);
+	//const std::pair<int, int> getPosition();
 
 private:
-	const Ped::Tagent *agent;
+	std::shared_ptr<Ped::Tagent_collection> agent;
 
 	// The rectangle on the GUI representing this agent
-	QGraphicsRectItem * rect;
+	std::vector<QGraphicsRectItem*> rect;
 };
 
 #endif

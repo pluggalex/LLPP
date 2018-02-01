@@ -16,6 +16,7 @@ using namespace std;
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
 
+
 // Sets up the heatmap
 void Ped::Model::setupHeatmapSeq()
 {
@@ -38,7 +39,7 @@ void Ped::Model::setupHeatmapSeq()
 		blurred_heatmap[i] = bhm + SCALED_SIZE*i;
 	}
 }
-
+/*
 // Updates the heatmap according to the agent positions
 void Ped::Model::updateHeatmapSeq()
 {
@@ -120,7 +121,7 @@ void Ped::Model::updateHeatmapSeq()
 		}
 	}
 }
-
+*/
 int Ped::Model::getHeatmapSize() const {
 	return SCALED_SIZE;
 }
