@@ -64,6 +64,7 @@ void Ped::Model::seqTick(){
 *	OpenMP version of tick().
 *	Simpler version where the workload is chunked up by OpenMP
 */
+/*
 void Ped::Model::ompTick(){
 	int size = this->agentCollection->size();
 
@@ -76,6 +77,7 @@ void Ped::Model::ompTick(){
 	}
 }
 
+/
 /*
 *	OpenMP version of tic()
 *	Chunks are already divided and the work to be done
@@ -85,14 +87,11 @@ void Ped::Model::ompTick_ver2(){
 	#pragma omp parallel
 	{
 		int thread_id = omp_get_thread_num();
+		int start = (*chunks)[thread_id] * thread_id;
+		int end = (*chunks)[thread_id] * (thread_id + 1);
 
-		for (int j = (*chunks)[thread_id] * thread_id; j < (*chunks)[thread_id] * (thread_id + 1); j++)
-		{
-			Tagent *agent = this->agents[j];
-			agent->computeNextDesiredPosition();
-			agent->setX(agent->getDesiredX());
-			agent->setY(agent->getDesiredY());
-		}
+		agentCollection->computeNextDesiredPositionScalar(start, end);
+		agentCollection->updateFromDesired(start, end);
 	}	
 }
 
@@ -133,19 +132,15 @@ void Ped::Model::pthreadTick(){
 *	Thread version of the tick functions compute part.
 *	Computes and Sets the destination of all agents in the given range.
 */
-void Ped::Model::computeAgentsInRange_version2(std::vector<Tagent*>::iterator start, std::vector<Tagent*>::iterator end, int threadId){
+void Ped::Model::computeAgentsInRange_version2(int start, int end, int threadId){
 	while (threadCompActive){
 
 		// Wait for the go signal from tick()
 		WaitForSingleObject(agentComputationSem[threadId], INFINITE);
 		
-		std::vector<Tagent*>::iterator current = start;
-		for (current; current < end; current++){
-			(*current)->computeNextDesiredPosition();
-			(*current)->setX((*current)->getDesiredX());
-			(*current)->setY((*current)->getDesiredY());
-		}
-		
+		agentCollection->computeNextDesiredPositionScalar(start, end);
+		agentCollection->updateFromDesired(start, end);
+
 		/* 
 		*	Instead of joining() on each thread we tell the tick() that
 		*	we are done by semaphore.
@@ -178,11 +173,9 @@ void Ped::Model::pthreadPrepTick(){
 
 	// Give each thread a chunk to work on, then just start the threads.
 	// They will wait for the semaphores before doing the computation
-	std::vector<Tagent*>::iterator agentsBegin = this->agents.begin();
-	std::vector<Tagent*>::iterator start;
-	std::vector<Tagent*>::iterator end;
+	int start, end;
 	for (int tId = 0; tId < threadNum; tId++){
-		start = agentsBegin + (*chunks)[tId] * tId;
+		start = (*chunks)[tId] * tId;
 		end = start + (*chunks)[tId];
 		tickThreads[tId] = std::thread(&Ped::Model::computeAgentsInRange_version2, this, start, end, tId);
 	}
@@ -190,7 +183,7 @@ void Ped::Model::pthreadPrepTick(){
 
 // Splits up the workload on N number of chunks where N is the number of threads in use
 void Ped::Model::chunkUp(){
-	int totalSize = this->agents.size();
+	int totalSize = this->agentCollection->size();
 	int chunkSize = totalSize / threadNum;
 	int rest = totalSize % threadNum;
 
@@ -210,11 +203,11 @@ void Ped::Model::tick()
 		break;
 
 	case OMP:
-		this->ompTick();
+		//this->ompTick();
 		break;
 
 	case PTHREAD: 
-		this->pthreadTick();
+		//this->pthreadTick();
 		break;
 
 	case OMP_2:
@@ -239,6 +232,7 @@ void Ped::Model::tick()
 
 // Moves the agent to the next desired position. If already taken, it will
 // be moved to a location close to it.
+/*
 void Ped::Model::move(Ped::Tagent *agent)
 {
 	// Search for neighboring agents
@@ -289,6 +283,7 @@ void Ped::Model::move(Ped::Tagent *agent)
 	}
 }
 
+
 /// Returns the list of neighbors within dist of the point x/y. This
 /// can be the position of an agent, but it is not limited to this.
 /// \date    2012-01-29
@@ -307,6 +302,7 @@ void Ped::Model::cleanup() {
 	// Nothing to do here right now. 
 
 }
+*/
 
 // Deletes the thread in a sort of safe manner
 void Ped::Model::killThreads(){

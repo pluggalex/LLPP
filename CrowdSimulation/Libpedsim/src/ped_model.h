@@ -21,7 +21,7 @@
 #include "ped_agent_collection.h"
 
 namespace Ped{
-	class Tagent;
+	class Tagent_collection;
 
 	// The implementation modes for Assignment 1 + 2:
 	// chooses which implementation to use for tick()
@@ -41,13 +41,13 @@ namespace Ped{
 		void seqTick();
 
 		// OpenMP version of tick()
-		void ompTick();
+		//void ompTick();
 
 		// OpenMP version_2 of tick()
 		void ompTick_ver2();
 
 		// Pthread version of tick()
-		void pthreadTick();
+		//void pthreadTick();
 		
 		void pthreadTick_ver2();
 
@@ -59,16 +59,16 @@ namespace Ped{
 		void chunkUp();
 
 		// Go from iterator start to end and set X and Y for the agents in that range
-		void computeAgentsInRange(std::vector<Tagent*>::iterator, std::vector<Tagent*>::iterator);
+		//void computeAgentsInRange(std::vector<Tagent*>::iterator, std::vector<Tagent*>::iterator);
 
 
-		void computeAgentsInRange_version2(std::vector<Tagent*>::iterator, std::vector<Tagent*>::iterator, int);
+		void computeAgentsInRange_version2(int start, int end, int tId);
 		
 		// Returns the agents of this scenario
-		const std::vector<Tagent*> getAgents() const { return agents; };
+		//const std::vector<Tagent*> getAgents() const { return agents; };
 
 		// Adds an agent to the tree structure
-		void placeAgent(const Ped::Tagent *a);
+		//void placeAgent(const Ped::Tagent *a);
 
 		// Cleans up the tree and restructures it. Worth calling every now and then.
 		void cleanup();
@@ -106,7 +106,7 @@ namespace Ped{
 		std::vector<int> *chunks;
 
 		// Moves an agent towards its next position
-		void move(Ped::Tagent *agent);
+		//void move(Ped::Tagent *agent);
 
 		
 		////////////
@@ -114,7 +114,7 @@ namespace Ped{
 		///////////////////////////////////////////////
 
 		// Returns the set of neighboring agents for the specified position
-		set<const Ped::Tagent*> getNeighbors(int x, int y, int dist) const;
+		//set<const Ped::Tagent*> getNeighbors(int x, int y, int dist) const;
 
 		////////////
 		/// Everything below here won't be relevant until Assignment 4
