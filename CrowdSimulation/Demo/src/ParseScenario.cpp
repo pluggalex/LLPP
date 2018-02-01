@@ -19,15 +19,17 @@
 #endif
 
 // Comparator used to identify if two agents differ in their position
-bool positionComparator(Ped::Tagent *a, Ped::Tagent *b) {
+/*bool positionComparator(Ped::Tagent *a, Ped::Tagent *b) {
 	// True if positions of agents differ
 	return (a->getX() < b->getX()) || ((a->getX() == b->getX()) && (a->getY() < b->getY()));
-}
+}*/
 
 /// object constructor
 /// \date    2011-01-03
-ParseScenario::ParseScenario(QString filename) : QObject(0)
+ParseScenario::ParseScenario(QString filename) : QObject(0) 
 {
+	this->agents = std::make_unique<Ped::Tagent_collection>();
+
 	QFile file(filename);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
@@ -42,7 +44,7 @@ ParseScenario::ParseScenario(QString filename) : QObject(0)
 	}
 
 	// Hack! Do not allow agents to be on the same position. Remove duplicates from scenario and free the memory.
-	bool(*fn_pt)(Ped::Tagent*, Ped::Tagent*) = positionComparator;
+	/*bool(*fn_pt)(Ped::Tagent*, Ped::Tagent*) = positionComparator;
 	std::set<Ped::Tagent*, bool(*)(Ped::Tagent*, Ped::Tagent*)> agentsWithUniquePosition(fn_pt);
 	int duplicates = 0;
 	for (auto agent : agents)
@@ -61,12 +63,12 @@ ParseScenario::ParseScenario(QString filename) : QObject(0)
 	{
 		std::cout << "Note: removed " << duplicates << " duplicates from scenario." << std::endl;
 	}
-	agents = std::vector<Ped::Tagent*>(agentsWithUniquePosition.begin(), agentsWithUniquePosition.end());
+	agents = std::vector<Ped::Tagent*>(agentsWithUniquePosition.begin(), agentsWithUniquePosition.end());*/
 }
 
-vector<Ped::Tagent*> ParseScenario::getAgents() const
+std::unique_ptr<Ped::Tagent_collection> ParseScenario::getAgents()
 {
-	return agents;
+	return std::move(this->agents);
 }
 
 
@@ -89,7 +91,7 @@ void ParseScenario::processXmlLine(QByteArray dataLine)
 	{
 		xmlReader.readNext();
 		// new definition
-		if (xmlReader.isStartElement())
+		if(xmlReader.isStartElement())
 		{
 			handleXmlStartElement();
 		}
@@ -134,12 +136,8 @@ void ParseScenario::handleXmlEndElement()
 	// If agents were created in this xml tag,
 	// then add the temporary agents to the final
 	// collection of agents
-	if (xmlReader.name() == "agent") {
-		Ped::Tagent *a;
-		foreach(a, tempAgents)
-		{
-			agents.push_back(a);
-		}
+	if(xmlReader.name() == "agent") {
+		*agents += *tempAgents;
 	}
 }
 
@@ -162,26 +160,18 @@ void ParseScenario::createAgents()
 	double dx = readDouble("dx");
 	double dy = readDouble("dy");
 
-	tempAgents.clear();
+	tempAgents = std::make_unique<Ped::Tagent_collection>();
 	for (int i = 0; i < n; ++i)
 	{
 		int xPos = x + qrand() / (RAND_MAX / dx) - dx / 2;
 		int yPos = y + qrand() / (RAND_MAX / dy) - dy / 2;
-		Ped::Tagent *a = new Ped::Tagent(xPos, yPos);
-		tempAgents.push_back(a);
+		tempAgents->addAgent(xPos, yPos);
 	}
 }
 
 void ParseScenario::addWaypointToCurrentAgents(QString &id)
 {
-	Ped::Tagent *a;
-
-	// add the waypoint defined by 'id' to
-	// agents created in current xml tag
-	foreach(a, tempAgents)
-	{
-		a->addWaypoint(waypoints[id]);
-	}
+	tempAgents->addWaypoint(waypoints[id]);
 }
 
 double ParseScenario::readDouble(const QString &tag)

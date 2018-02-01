@@ -9,13 +9,13 @@
 #ifndef _parsescenario_h_
 #define _parsescenario_h_
 
-#include "ped_agent.h"
 #include "ped_agent_collection.h"
 #include "ped_waypoint.h"
 #include <QtCore>
 #include <QXmlStreamReader>
 #include <vector>
 #include <set>
+#include <memory>
 
 using namespace std;
 
@@ -27,7 +27,7 @@ public:
 	ParseScenario(QString file);
 
 	// returns the collection of agents defined by this scenario
-	vector<Ped::Tagent*> getAgents() const;
+	std::unique_ptr<Ped::Tagent_collection> getAgents();
 	std::vector<Ped::Twaypoint*> getWaypoints();
 	private slots:
 	void processXmlLine(QByteArray data);
@@ -37,13 +37,13 @@ private:
 	QXmlStreamReader xmlReader;
 
 	// final collection of all created agents
-	vector<Ped::Tagent*> agents;
+	std::unique_ptr<Ped::Tagent_collection> agents;
 	
 
 	// temporary collection of agents used to
 	// keep track of all agents that are generated
 	// within the current opened agents xml tag
-	vector<Ped::Tagent*> tempAgents;
+	std::unique_ptr<Ped::Tagent_collection> tempAgents;
 
 	// contains all defined waypoints
 	map<QString, Ped::Twaypoint*> waypoints;

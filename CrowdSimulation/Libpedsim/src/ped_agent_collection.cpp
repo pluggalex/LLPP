@@ -18,7 +18,7 @@
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
 
-Ped::Tagent_collection::Tagent_collection() {destinations = new Ped::waypoints(); }
+Ped::Tagent_collection::Tagent_collection() {destinations = std::make_unique<Ped::waypoints>(); }
 
 void Ped::Tagent_collection::addAgent(int posX, int posY){
 	x.push_back(posX);
@@ -48,11 +48,11 @@ void Ped::Tagent_collection::computeNextDesiredPositionScalar(int start, int end
 	setNextDestinationScalar(start, end);
 
 	for (int index = start; index < end; index++){
-		double diffX = destinations->getx()[index] - x[index];
-		double diffY = destinations->gety()[index] - y[index];
+		double diffX = destinations->getDestRefX()[index] - x[index];
+		double diffY = destinations->getDestRefY()[index] - y[index];
 		double len = sqrt(diffX * diffX + diffY * diffY);
 
-		if (len < destinations->getr()[index]){
+		if (len < destinations->getDestRefR()[index]){
 			destinations->rotateQueue(index);
 		}
 		else{
@@ -66,6 +66,18 @@ void Ped::Tagent_collection::addWaypoint(Twaypoint* wp) {
 	destinations->addWaypoint(wp, 0, x.size());
 }
 
+
+Ped::Tagent_collection Ped::Tagent_collection::operator += (const Ped::Tagent_collection& rhs){
+	std::vector<int> rhsX = rhs.getX();
+	std::vector<int> rhsY = rhs.getY();
+	Ped::waypoints* rhsDest = rhs.borrowDestinations();
+	std::copy(rhsX.begin(), rhsX.end(), x.end());
+	std::copy(rhsY.begin(), rhsY.end(), y.end());
+	
+	*destinations += *rhsDest;
+
+	return *this;
+}
 
 /*
 * Potentially not needed, maybe :)

@@ -38,6 +38,20 @@ void Ped::waypoints::addWaypoint(Ped::Twaypoint* waypoint, int start, int end){
 	std::fill(waypointR[size].begin() + start, waypointR[size].begin() + end, waypoint->getr());
 }
 
+Ped::waypoints Ped::waypoints::operator += (const Ped::waypoints& rhs){
+	std::vector<std::vector<int>> rhsX = rhs.getX();
+	std::vector<std::vector<int>> rhsY = rhs.getY();
+	std::vector<std::vector<int>> rhsR = rhs.getR();
+	
+	//Pajko, fixa!!
+	std::copy(rhsX.begin(), rhsX.end(), waypointX.end());nej
+	std::copy(rhsY.begin(), rhsY.end(), waypointY.end());ska inte kompilera
+	std::copy(rhsR.begin(), rhsR.end(), waypointR.end());glöm inte att fixxa detta :D Blir nog kul...
+
+
+	return *this;
+}
+
 // TODO
 // Make sure that the nullvalues gets handled somehow
 void bubbleToBack(int agent, std::vector<std::vector<int>>& waypointQueue){

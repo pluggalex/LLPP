@@ -18,6 +18,8 @@
 
 #include <vector>
 #include <deque>
+#include <memory>
+//#include <utility>
 #include "ped_waypoints.h"
 #include "ped_waypoint.h"
 
@@ -50,13 +52,16 @@ namespace Ped {
 
 		// Position of agent defined by x and y
 		// TODO
-		//int getX() const { return x; };
-		//int getY() const { return y; };
+		std::vector<int> getX() const { return x; };
+		std::vector<int> getY() const { return y; };
+		Ped::waypoints* borrowDestinations() const { return destinations.get(); }
 
 		// Add a new waypoint for every agent
 		void addWaypoint(Twaypoint* wp);
 
 		void addAgent(int x, int y);
+
+		Ped::Tagent_collection operator+=(const Ped::Tagent_collection& rhs);
 
 
 	private:
@@ -69,7 +74,7 @@ namespace Ped {
 		std::vector<int> desiredPositionY;
 
 		// The current destination (may require several steps to reach)
-		waypoints* destinations; //This is a combined destination and queue atm
+		std::unique_ptr<Ped::waypoints> destinations; //This is a combined destination and queue atm
 
 		// Returns the next destination to visit
 		void setNextDestinationScalar(int start_agent, int end_agent);
