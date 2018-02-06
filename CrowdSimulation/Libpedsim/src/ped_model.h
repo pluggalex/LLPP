@@ -41,15 +41,10 @@ namespace Ped{
 		void seqTick();
 
 		// OpenMP version of tick()
-		//void ompTick();
-
-		// OpenMP version_2 of tick()
-		void ompTick_ver2();
+		void ompTick();
 
 		// Pthread version of tick()
-		//void pthreadTick();
-		
-		void pthreadTick_ver2();
+		void pthreadTick();
 
 		void pthreadPrepTick();
 

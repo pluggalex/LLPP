@@ -1,25 +1,68 @@
-<<<<<<< HEAD
-﻿Build started 2018-02-01 18:08:12.
+﻿Build started 2018-02-06 09:08:00.
      1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\Demo.vcxproj" on node 2 (Build target(s)).
-     1>Link:
-=======
-﻿Build started 2018-01-25 17:20:31.
-     1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\Demo.vcxproj" on node 2 (Rebuild target(s)).
-     1>CustomBuild:
-         MOC src/ParseScenario.h
-         MOC src/PedSimulation.h
-       ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I. /I. /I..\Libpedsim\src /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtOpenGL /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore /Irelease /I"C:\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013" /nologo /W3 /WX- /O2 /D _CONSOLE /D UNICODE /D WIN32 /D WIN64 /D NOMINMAX /D QT_NO_DEBUG /D QT_OPENGL_LIB /D QT_WIDGETS_LIB /D QT_GUI_LIB /D QT_CORE_LIB /D NDEBUG /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"release\\" /Gd /TP /errorReport:prompt -Zc:strictStrings -w34100 -w34189 -w44996 src\MainWindow.cpp src\ParseScenario.cpp src\PedSimulation.cpp src\ViewAgent.cpp src\main.cpp release\moc_ParseScenario.cpp release\moc_PedSimulation.cpp
-         MainWindow.cpp
-         ParseScenario.cpp
-         PedSimulation.cpp
-         ViewAgent.cpp
-         main.cpp
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I. /I. /I..\Libpedsim\src /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtOpenGL /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore /Irelease /I"C:\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013" /nologo /W3 /WX- /O2 /D _CONSOLE /D UNICODE /D WIN32 /D WIN64 /D NOMINMAX /D QT_NO_DEBUG /D QT_OPENGL_LIB /D QT_WIDGETS_LIB /D QT_GUI_LIB /D QT_CORE_LIB /D NDEBUG /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"release\\" /Gd /TP /errorReport:prompt -Zc:strictStrings -w34100 -w34189 -w44996 release\moc_ParseScenario.cpp release\moc_PedSimulation.cpp src\MainWindow.cpp src\ParseScenario.cpp src\PedSimulation.cpp src\ViewAgent.cpp src\main.cpp
          moc_ParseScenario.cpp
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(70): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<float,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=float
+                 ]
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(71): warning C4251: 'Ped::waypoints::waypointY' : class 'std::vector<std::vector<float,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=float
+                 ]
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(72): warning C4251: 'Ped::waypoints::waypointR' : class 'std::vector<std::vector<float,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=float
+                 ]
+     1>..\Libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
          moc_PedSimulation.cpp
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
+         MainWindow.cpp
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
+         ParseScenario.cpp
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(70): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<float,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=float
+                 ]
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(71): warning C4251: 'Ped::waypoints::waypointY' : class 'std::vector<std::vector<float,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=float
+                 ]
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(72): warning C4251: 'Ped::waypoints::waypointR' : class 'std::vector<std::vector<float,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=float
+                 ]
+     1>..\Libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
+         PedSimulation.cpp
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
+         ViewAgent.cpp
+     1>..\Libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
+         main.cpp
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(70): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<float,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=float
+                 ]
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(71): warning C4251: 'Ped::waypoints::waypointY' : class 'std::vector<std::vector<float,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=float
+                 ]
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(72): warning C4251: 'Ped::waypoints::waypointR' : class 'std::vector<std::vector<float,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
+                 with
+                 [
+                     _Ty=float
+                 ]
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
          Generating Code...
        Link:
->>>>>>> 8beaaf3319ccd32730ed94c450b9e815b7409948
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"timing-release\Demo\\Demo.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"..\x64\timing-release" /LIBPATH:"C:\Progra~1\NVIDIA~2\CUDA\v7.5\lib\x64" /LIBPATH:C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib libpedsim.lib Qt5PlatformSupport.lib "C:\Progra~1\NVIDIA~2\CUDA\v7.5\lib\x64\cudart.lib" C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5OpenGL.lib C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Widgets.lib C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Gui.lib C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Core.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST:NO /PDB:"timing-release\Demo\Demo.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /MACHINE:X64 "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" release\MainWindow.obj
          release\ParseScenario.obj
          release\PedSimulation.obj
@@ -32,16 +75,8 @@
          Generating code
          Finished generating code
          Demo.vcxproj -> C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\timing-release\Demo\Demo.exe
-<<<<<<< HEAD
      1>Done Building Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\Demo.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.66
-=======
-     1>Done Building Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\Demo.vcxproj" (Rebuild target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:17.06
->>>>>>> 8beaaf3319ccd32730ed94c450b9e815b7409948
+Time Elapsed 00:00:15.28
