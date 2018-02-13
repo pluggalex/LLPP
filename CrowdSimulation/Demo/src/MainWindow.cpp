@@ -69,9 +69,9 @@ void MainWindow::paint() {
 	std::vector<QColor> colors;
 	std::set<std::tuple<int, int> > positionsTaken;
 
-	std::vector<int> agentVectorX = model.getAgents()->getX();
+	std::vector<float> agentVectorX = model.getAgents()->getX();
 	auto xIterator = agentVectorX.begin();
-	std::vector<int> agentVectorY = model.getAgents()->getY();
+	std::vector<float> agentVectorY = model.getAgents()->getY();
 	auto yIterator = agentVectorY.begin();
 	auto xEnd = agentVectorX.end();
 

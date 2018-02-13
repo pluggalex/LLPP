@@ -41,13 +41,13 @@ namespace Ped {
 		*/
 		void setAgents(int amount){ agents = amount; }
 
-		std::vector<int>& getDestRefX() { return waypointX.front(); };
-		std::vector<int>& getDestRefY() { return waypointY.front(); };
-		std::vector<int>& getDestRefR() { return waypointR.front(); };
+		std::vector<float>& getDestRefX() { return waypointX.front(); };
+		std::vector<float>& getDestRefY() { return waypointY.front(); };
+		std::vector<float>& getDestRefR() { return waypointR.front(); };
 		
-		std::vector<std::vector<int>> getX() const { return waypointX; }
-		std::vector<std::vector<int>> getY() const { return waypointY; }
-		std::vector<std::vector<int>> getR() const { return waypointR; }
+		std::vector<std::vector<float>> getX() const { return waypointX; }
+		std::vector<std::vector<float>> getY() const { return waypointY; }
+		std::vector<std::vector<float>> getR() const { return waypointR; }
 
 		//Range of agents
 		void addWaypoint(Ped::Twaypoint* waypoint, int start, int end);
@@ -67,9 +67,9 @@ namespace Ped {
 		
 		int agents;
 
-		std::vector<std::vector<int>> waypointX;
-		std::vector<std::vector<int>> waypointY;
-		std::vector<std::vector<int>> waypointR;
+		std::vector<std::vector<float>> waypointX;
+		std::vector<std::vector<float>> waypointY;
+		std::vector<std::vector<float>> waypointR;
 	};
 }
 

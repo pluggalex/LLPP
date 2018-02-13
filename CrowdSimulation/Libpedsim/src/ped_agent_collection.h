@@ -19,7 +19,7 @@
 #include <vector>
 #include <deque>
 #include <memory>
-//#include <utility>
+#include <xmmintrin.h>
 #include "ped_waypoints.h"
 #include "ped_waypoint.h"
 
@@ -48,14 +48,21 @@ namespace Ped {
 		// to the current destination
 		void computeNextDesiredPositionScalar(int start, int end);
 
+		void computeNextDesiredPositionVector(int start, int end);
+
 		//void computeNextDesiredPositionVector(int start, int end);
 
 		// Position of agent defined by x and y
 		// TODO
-		std::vector<int> getX() const { return x; }
-		std::vector<int> getY() const { return y; }
-		std::vector<int> getDesiredX() const { return desiredPositionX; }
-		std::vector<int> getDesiredY() const { return desiredPositionY; }
+		std::vector<float> getX() const { return x; }
+		std::vector<float> getY() const { return y; }
+		std::vector<float>* getXptr() { return &x; }
+		std::vector<float>* getYptr() { return &y; }
+		std::vector<float> getDesiredX() const { return desiredPositionX; }
+		std::vector<float> getDesiredY() const { return desiredPositionY; }
+		std::vector<float>* getDesiredXptr() { return &desiredPositionX; }
+		std::vector<float>* getDesiredYptr() { return &desiredPositionY; }
+
 		Ped::waypoints* borrowDestinations() const { return destinations.get(); }
 
 		// Add a new waypoint for every agent
@@ -68,18 +75,23 @@ namespace Ped {
 
 	private:
 		// The agent's current position
-		std::vector<int> x;
-		std::vector<int> y;
+		std::vector<float> x;
+		std::vector<float> y;
 
 		// The agent's desired next position
-		std::vector<int> desiredPositionX;
-		std::vector<int> desiredPositionY;
+		std::vector<float> desiredPositionX;
+		std::vector<float> desiredPositionY;
 
 		// The current destination (may require several steps to reach)
 		std::unique_ptr<Ped::waypoints> destinations; //This is a combined destination and queue atm
 
 		// Returns the next destination to visit
 		void setNextDestinationScalar(int start_agent, int end_agent);
+
+		void desiredUpdateVector(int start, int end, std::vector<float>&, std::vector<float>&, std::vector<float>&);
+
+		void Ped::Tagent_collection::computeDiff(int start, int end, std::vector<float>&, std::vector<float>&, std::vector<float>&, std::vector<float>&, std::vector<float>&);
+
 	};
 }
 

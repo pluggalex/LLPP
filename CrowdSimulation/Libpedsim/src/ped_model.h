@@ -41,15 +41,10 @@ namespace Ped{
 		void seqTick();
 
 		// OpenMP version of tick()
-		//void ompTick();
-
-		// OpenMP version_2 of tick()
-		void ompTick_ver2();
+		void ompTick();
 
 		// Pthread version of tick()
-		//void pthreadTick();
-		
-		void pthreadTick_ver2();
+		void pthreadTick();
 
 		void pthreadPrepTick();
 
@@ -106,7 +101,7 @@ namespace Ped{
 		std::vector<int> *chunks;
 
 		// Moves an agent towards its next position
-		//void move(Ped::Tagent *agent);
+		void move(int, int);
 
 		
 		////////////
@@ -114,7 +109,13 @@ namespace Ped{
 		///////////////////////////////////////////////
 
 		// Returns the set of neighboring agents for the specified position
-		//set<const Ped::Tagent*> getNeighbors(int x, int y, int dist) const;
+		std::vector<vector<float>> getNeighbors(int x, int y, int dist) const;
+
+		void collisionHandler(int index, 
+								std::vector<float>* agentXs, 
+								std::vector<float>* agentY, 
+								std::vector<float>* agentDesiredXs, 
+								std::vector<float>*);
 
 		////////////
 		/// Everything below here won't be relevant until Assignment 4

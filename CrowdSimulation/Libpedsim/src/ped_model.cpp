@@ -35,20 +35,20 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 	//destinations = std::vector<Ped::Twaypoint*>(destinationsInScenario.begin(), destinationsInScenario.end());
 
 	// This is the sequential implementation
-	implementation = PTHREAD_2;
+	implementation = SEQ;
 
 	// Set up heatmap (relevant for Assignment 4)
 	setupHeatmapSeq();
 
-	threadNum = 4;
-	if (implementation == OMP_2)
+	threadNum = 2;
+	if (implementation == OMP)
 		omp_set_num_threads(threadNum);
 
 	//Split up the workload in chunks of N number of threads
 	chunkUp();
 
 	// Prep the threads for parallelization
-	if (implementation == PTHREAD_2)
+	if (implementation == PTHREAD)
 		Ped::Model::pthreadPrepTick();
 }
 
@@ -56,33 +56,12 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 // Sequential tick..
 void Ped::Model::seqTick(){
 	agentCollection->computeNextDesiredPositionScalar(0, agentCollection->size());
-	agentCollection->updateFromDesired(0, agentCollection->size());
+	move(0, agentCollection->size());
+	//agentCollection->updateFromDesired(0, agentCollection->size());
 }
 
 
-/*
-*	OpenMP version of tick().
-*	Simpler version where the workload is chunked up by OpenMP
-*/
-/*
 void Ped::Model::ompTick(){
-	int size = this->agentCollection->size();
-
-	#pragma omp parallel for 
-	for (int i = 0; i < size; i++){
-		Tagent *agent = this->agents[i];
-		agent->computeNextDesiredPosition();
-		agent->setX(agent->getDesiredX());
-		agent->setY(agent->getDesiredY());
-	}
-}
-
-/*
-*	OpenMP version of tic()
-*	Chunks are already divided and the work to be done
-*   can be done in parallel.
-*/
-void Ped::Model::ompTick_ver2(){
 	#pragma omp parallel
 	{
 		int thread_id = omp_get_thread_num();
@@ -93,38 +72,6 @@ void Ped::Model::ompTick_ver2(){
 		agentCollection->updateFromDesired(start, end);
 	}	
 }
-
-/* old thread version*/
-/*
-void Ped::Model::computeAgentsInRange(std::vector<Tagent*>::iterator current, std::vector<Tagent*>::iterator end){
-	for (current; current < end; current++){
-		(*current)->computeNextDesiredPosition();
-		(*current)->setX((*current)->getDesiredX());
-		(*current)->setY((*current)->getDesiredY());
-	}
-}
-
-void Ped::Model::pthreadTick(){
-	tickThreads = new std::thread[threadNum];
-	int totalSize = this->agents.size();
-	int chunkSize = totalSize / threadNum;
-	int rest = totalSize % threadNum;
-
-	std::vector<int> chunks( threadNum, chunkSize );
-	for (int i = 0; i < rest; i++){
-		chunks[i] += 1;
-	}
-
-	std::vector<Tagent*>::iterator agentsBegin = this->agents.begin();
-	std::vector<Tagent*>::iterator start;
-	std::vector<Tagent*>::iterator end;
-	for (int t = 0; t < threadNum; t++){
-		start = agentsBegin + (chunks[t] * t);
-		end = agentsBegin + (chunks[t] * (t + 1));
-		tickThreads[t] = std::thread(&Ped::Model::computeAgentsInRange, this, start, end);
-	}
-}
-*/
 
 
 /* 
@@ -137,7 +84,7 @@ void Ped::Model::computeAgentsInRange_version2(int start, int end, int threadId)
 		// Wait for the go signal from tick()
 		WaitForSingleObject(agentComputationSem[threadId], INFINITE);
 		
-		agentCollection->computeNextDesiredPositionScalar(start, end);
+		agentCollection->computeNextDesiredPositionVector(start, end);
 		agentCollection->updateFromDesired(start, end);
 
 		/* 
@@ -148,7 +95,7 @@ void Ped::Model::computeAgentsInRange_version2(int start, int end, int threadId)
 	}
 }
 
-void Ped::Model::pthreadTick_ver2(){
+void Ped::Model::pthreadTick(){
 	for (int i = 0; i < agentComputationSem.size(); i++){
 		ReleaseSemaphore(agentComputationSem[i], 1, NULL);
 	}
@@ -183,13 +130,20 @@ void Ped::Model::pthreadPrepTick(){
 // Splits up the workload on N number of chunks where N is the number of threads in use
 void Ped::Model::chunkUp(){
 	int totalSize = this->agentCollection->size();
-	int chunkSize = totalSize / threadNum;
-	int rest = totalSize % threadNum;
+	int registerSize = 4;
+	int numRegisters = totalSize / registerSize;
+	int restElems = totalSize % registerSize;
+
+	int chunkSize = (numRegisters / threadNum) * registerSize;
+	int restChunks = numRegisters % threadNum;
 
 	chunks = new std::vector<int>(threadNum, chunkSize);
-	for (int i = 0; i < rest; i++){
-		(*chunks)[i] += 1;
+	for (int i = 0; i < restChunks; i++){
+		(*chunks)[i] += registerSize;
 	}
+
+	if (restElems)
+		(*chunks)[threadNum - 1] += registerSize;
 }
 
 void Ped::Model::tick()
@@ -202,19 +156,11 @@ void Ped::Model::tick()
 		break;
 
 	case OMP:
-		//this->ompTick();
+		this->ompTick();
 		break;
 
 	case PTHREAD: 
-		//this->pthreadTick();
-		break;
-
-	case OMP_2:
-		this->ompTick_ver2();
-		break;
-
-	case PTHREAD_2:	
-		this->pthreadTick_ver2();
+		this->pthreadTick();
 		break;
 
 	default:
@@ -231,28 +177,51 @@ void Ped::Model::tick()
 
 // Moves the agent to the next desired position. If already taken, it will
 // be moved to a location close to it.
-/*
-void Ped::Model::move(Ped::Tagent *agent)
+
+void Ped::Model::move(int start, int end)
 {
+
+	std::vector<float>* agentXs = this->agentCollection->getXptr();
+	std::vector<float>* agentYs = this->agentCollection->getYptr();
+
+	std::vector<float>* agentDesiredXs = this->agentCollection->getDesiredXptr();
+	std::vector<float>* agentDesiredYs = this->agentCollection->getDesiredYptr();
+
+	for (int i = start; i < end; i++){
+		collisionHandler(i, agentXs, agentYs, agentDesiredXs, agentDesiredYs);
+	}
+}
+
+void Ped::Model::collisionHandler(int index, 
+									std::vector<float>* agentXs, 
+									std::vector<float>* agentYs,	
+									std::vector<float>* agentDesiredXs, 
+									std::vector<float>* agentDesiredYs){
 	// Search for neighboring agents
-	set<const Ped::Tagent *> neighbors = getNeighbors(agent->getX(), agent->getY(), 2);
+	std::vector<vector<float>> neighbors = getNeighbors(1,2,3);//Getting all x and y's atm
+	std::vector<float> neighborX = neighbors[0];
+	std::vector<float> neighborY = neighbors[1];
+	std::vector<float> neighborDesiredX = neighbors[0];
+	std::vector<float> neighborDesiredY = neighbors[0];
 
 	// Retrieve their positions
-	std::vector<std::pair<int, int> > takenPositions;
-	for (std::set<const Ped::Tagent*>::iterator neighborIt = neighbors.begin(); neighborIt != neighbors.end(); ++neighborIt) {
-		std::pair<int, int> position((*neighborIt)->getX(), (*neighborIt)->getY());
+	std::vector<std::pair<float, float> > takenPositions;
+	for (int i = 0; i < neighborX.size(); i++) {
+		std::pair<float, float> position(neighborX[i], neighborY[i]);
 		takenPositions.push_back(position);
+		//std::pair<float, float> position2(neighborDesiredX[i], neighborDesiredY[i]);
+		//takenPositions.push_back(position2);
 	}
 
 	// Compute the three alternative positions that would bring the agent
 	// closer to his desiredPosition, starting with the desiredPosition itself
-	std::vector<std::pair<int, int> > prioritizedAlternatives;
-	std::pair<int, int> pDesired(agent->getDesiredX(), agent->getDesiredY());
+	std::vector<std::pair<float, float> > prioritizedAlternatives;
+	std::pair<float, float> pDesired((*agentDesiredXs)[index], (*agentDesiredYs)[index]);
 	prioritizedAlternatives.push_back(pDesired);
 
-	int diffX = pDesired.first - agent->getX();
-	int diffY = pDesired.second - agent->getY();
-	std::pair<int, int> p1, p2;
+	int diffX = pDesired.first - (*agentXs)[index];
+	int diffY = pDesired.second - (*agentYs)[index];
+	std::pair<float, float> p1, p2;
 	if (diffX == 0 || diffY == 0)
 	{
 		// Agent wants to walk straight to North, South, West or East
@@ -261,21 +230,24 @@ void Ped::Model::move(Ped::Tagent *agent)
 	}
 	else {
 		// Agent wants to walk diagonally
-		p1 = std::make_pair(pDesired.first, agent->getY());
-		p2 = std::make_pair(agent->getX(), pDesired.second);
+		p1 = std::make_pair(pDesired.first, (*agentYs)[index]);
+		p2 = std::make_pair((*agentXs)[index], pDesired.second);
 	}
 	prioritizedAlternatives.push_back(p1);
 	prioritizedAlternatives.push_back(p2);
 
 	// Find the first empty alternative position
-	for (std::vector<pair<int, int> >::iterator it = prioritizedAlternatives.begin(); it != prioritizedAlternatives.end(); ++it) {
+	for (std::vector<pair<float, float> >::iterator it = prioritizedAlternatives.begin(); it != prioritizedAlternatives.end(); ++it) {
 
 		// If the current position is not yet taken by any neighbor
 		if (std::find(takenPositions.begin(), takenPositions.end(), *it) == takenPositions.end()) {
 
 			// Set the agent's position 
-			agent->setX((*it).first);
-			agent->setY((*it).second);
+			//(*agentDesiredXs)[index] = (*it).first;
+			//(*agentDesiredYs)[index] = (*it).second;
+
+			(*agentXs)[index] = (*it).first;
+			(*agentYs)[index] = (*it).second;
 
 			break;
 		}
@@ -290,37 +262,37 @@ void Ped::Model::move(Ped::Tagent *agent)
 /// \param   x the x coordinate
 /// \param   y the y coordinate
 /// \param   dist the distance around x/y that will be searched for agents (search field is a square in the current implementation)
-set<const Ped::Tagent*> Ped::Model::getNeighbors(int x, int y, int dist) const {
+std::vector<vector<float>> Ped::Model::getNeighbors(int x = 1, int y = 1, int dist = 1) const {
+
+	//std::vector<float>* agentXs = this->agentCollection->getXptr();
+	//std::vector<float>* agentYs = this->agentCollection->getYptr();
+	//int xTop = x ;
+
 
 	// create the output list
 	// ( It would be better to include only the agents close by, but this programmer is lazy.)	
-	return set<const Ped::Tagent*>(agents.begin(), agents.end());
+	std::vector<std::vector<float>> res;
+	res.push_back(this->agentCollection->getX());
+	res.push_back(this->agentCollection->getY());
+	res.push_back(this->agentCollection->getDesiredX());
+	res.push_back(this->agentCollection->getDesiredY());
+	return res;
 }
 
 void Ped::Model::cleanup() {
 	// Nothing to do here right now. 
 
 }
-*/
+
 
 // Deletes the thread in a sort of safe manner
 void Ped::Model::killThreads(){
 	threadCompActive = false; // Will make the tread finish return once another tick is done
-	pthreadTick_ver2();		  // Call for a last tick
+	pthreadTick();		  // Call for a last tick
 
 	// Join up and delete the threads
 	for (int t = 0; t < threadNum; t++){
 		tickThreads[t].join();//
-	}
-
-	delete[] tickThreads;
-}
-
-void Ped::Model::killThreads(){
-	threadCompActive = false;
-	pthreadTick_ver2();
-	for (int t = 0; t < threadNum; t++){
-		tickThreads[t].join();
 	}
 
 	delete[] tickThreads;

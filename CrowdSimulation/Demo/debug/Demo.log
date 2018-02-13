@@ -1,77 +1,6 @@
-<<<<<<< HEAD
-﻿Build started 2018-02-01 18:10:07.
-     1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\Demo.vcxproj" on node 2 (Rebuild target(s)).
-     1>CustomBuild:
-         MOC src/ParseScenario.h
-         MOC src/PedSimulation.h
-       ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I. /I. /I..\Libpedsim\src /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtOpenGL /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtWidgets /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtGui /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtANGLE /IC:\Qt\Qt5.7.0\5.7\msvc2013_64\include\QtCore /Idebug /I"C:\Qt\Qt5.7.0\5.7\msvc2013_64\mkspecs\win32-msvc2013" /Zi /nologo /W3 /WX- /Od /D _CONSOLE /D UNICODE /D WIN32 /D WIN64 /D NOMINMAX /D QT_OPENGL_LIB /D QT_WIDGETS_LIB /D QT_GUI_LIB /D QT_CORE_LIB /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"debug\\" /Fd"debug\vc120.pdb" /Gd /TP /errorReport:prompt -w34100 -w34189 -w44996 src\MainWindow.cpp src\ParseScenario.cpp src\PedSimulation.cpp src\ViewAgent.cpp src\main.cpp debug\moc_ParseScenario.cpp debug\moc_PedSimulation.cpp
-         MainWindow.cpp
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-         ParseScenario.cpp
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(70): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
-                 with
-                 [
-                     _Ty=int
-                 ]
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(71): warning C4251: 'Ped::waypoints::waypointY' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
-                 with
-                 [
-                     _Ty=int
-                 ]
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(72): warning C4251: 'Ped::waypoints::waypointR' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
-                 with
-                 [
-                     _Ty=int
-                 ]
-     1>C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-         PedSimulation.cpp
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-         ViewAgent.cpp
-     1>C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-         main.cpp
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(70): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
-                 with
-                 [
-                     _Ty=int
-                 ]
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(71): warning C4251: 'Ped::waypoints::waypointY' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
-                 with
-                 [
-                     _Ty=int
-                 ]
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(72): warning C4251: 'Ped::waypoints::waypointR' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
-                 with
-                 [
-                     _Ty=int
-                 ]
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-         moc_ParseScenario.cpp
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(70): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
-                 with
-                 [
-                     _Ty=int
-                 ]
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(71): warning C4251: 'Ped::waypoints::waypointY' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
-                 with
-                 [
-                     _Ty=int
-                 ]
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(72): warning C4251: 'Ped::waypoints::waypointR' : class 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
-                 with
-                 [
-                     _Ty=int
-                 ]
-     1>C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-         moc_PedSimulation.cpp
-     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-         Generating Code...
-       Link:
-=======
-﻿Build started 2018-01-25 17:19:45.
+﻿Build started 2018-02-13 12:42:04.
      1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\Demo.vcxproj" on node 2 (Build target(s)).
      1>Link:
->>>>>>> 8beaaf3319ccd32730ed94c450b9e815b7409948
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"debug\Demo\\Demo.exe" /NOLOGO /LIBPATH:..\x64\Debug /LIBPATH:"C:\Progra~1\NVIDIA~2\CUDA\v7.5\lib\x64" /LIBPATH:C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib libpedsim.lib Qt5PlatformSupport.lib "C:\Progra~1\NVIDIA~2\CUDA\v7.5\lib\x64\cudart.lib" C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5OpenGLd.lib C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Widgetsd.lib C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Guid.lib C:\Qt\Qt5.7.0\5.7\msvc2013_64\lib\Qt5Cored.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST:NO /DEBUG /PDB:"debug\Demo\Demo.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /MACHINE:X64 "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" debug\MainWindow.obj
          debug\ParseScenario.obj
          debug\PedSimulation.obj
@@ -79,15 +8,10 @@
          debug\main.obj
          debug\moc_ParseScenario.obj
          debug\moc_PedSimulation.obj
-         LINK : debug\Demo\\Demo.exe not found or not built by the last incremental link; performing full link
             Creating library debug\Demo\\Demo.lib and object debug\Demo\\Demo.exp
          Demo.vcxproj -> C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\debug\Demo\Demo.exe
-<<<<<<< HEAD
-     1>Done Building Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\Demo.vcxproj" (Rebuild target(s)).
-=======
      1>Done Building Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\Demo.vcxproj" (Build target(s)).
->>>>>>> 8beaaf3319ccd32730ed94c450b9e815b7409948
 
 Build succeeded.
 
-Time Elapsed 00:00:18.87
+Time Elapsed 00:00:00.43

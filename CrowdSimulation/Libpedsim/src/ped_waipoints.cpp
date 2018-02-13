@@ -27,9 +27,9 @@ Ped::waypoints::~waypoints() {};
 void Ped::waypoints::addWaypoint(Ped::Twaypoint* waypoint, int start, int end){
 	
 	//Create space for another waypoint in the vectors
-	waypointX.push_back(std::vector<int>(agents, NULL));
-	waypointY.push_back(std::vector<int>(agents, NULL));
-	waypointR.push_back(std::vector<int>(agents, NULL));
+	waypointX.push_back(std::vector<float>(agents, NULL));
+	waypointY.push_back(std::vector<float>(agents, NULL));
+	waypointR.push_back(std::vector<float>(agents, NULL));
 
 	int size = waypointX.size() - 1;
 	//Fille the empty waypoint space with coordinates
@@ -40,9 +40,9 @@ void Ped::waypoints::addWaypoint(Ped::Twaypoint* waypoint, int start, int end){
 
 
 //Assumes same length for both vectors.. Fix it later
-void zipVectors(std::vector<std::vector<int>>& sourceVector, std::vector<std::vector<int>>& destVector){
+void zipVectors(std::vector<std::vector<float>>& sourceVector, std::vector<std::vector<float>>& destVector){
 	for (int i = 0; i < destVector.size() - sourceVector.size(); i++){
-		destVector.push_back(std::vector<int>());
+		destVector.push_back(std::vector<float>());
 	}
 
 	for (int i = 0; i < sourceVector.size(); i++)
@@ -51,9 +51,9 @@ void zipVectors(std::vector<std::vector<int>>& sourceVector, std::vector<std::ve
 
 
 Ped::waypoints& Ped::waypoints::operator += (const Ped::waypoints& rhs){
-	std::vector<std::vector<int>> rhsX = rhs.getX();
-	std::vector<std::vector<int>> rhsY = rhs.getY();
-	std::vector<std::vector<int>> rhsR = rhs.getR();
+	std::vector<std::vector<float>> rhsX = rhs.getX();
+	std::vector<std::vector<float>> rhsY = rhs.getY();
+	std::vector<std::vector<float>> rhsR = rhs.getR();
 	
 	zipVectors(rhsX, waypointX);
 	zipVectors(rhsY, waypointY);
@@ -65,7 +65,7 @@ Ped::waypoints& Ped::waypoints::operator += (const Ped::waypoints& rhs){
 
 // TODO
 // Make sure that the nullvalues gets handled somehow
-void bubbleToBack(int agent, std::vector<std::vector<int>>& waypointQueue){
+void bubbleToBack(int agent, std::vector<std::vector<float>>& waypointQueue){
 	for (int i = 0; i < waypointQueue.size()-1; i++){
 		std::swap(waypointQueue[i][agent], waypointQueue[i+1][agent]);
 	}
