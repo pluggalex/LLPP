@@ -231,6 +231,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="src\cuda_testkernel.cu" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\QuadTree.cpp" />
     <ClCompile Include="src\ped_agent_collection.cpp" />
     <ClCompile Include="src\heatmap_seq.cpp" />
     <ClCompile Include="src\ped_agent.cpp" />
@@ -240,6 +241,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClCompile Include="src\ped_waipoints.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\QuadTree.h" />
     <ClInclude Include="src\ped_agent_collection.h" />
     <ClInclude Include="src\ped_waypoints.h" />
     <ClInclude Include="src\cuda_testkernel.h" />
