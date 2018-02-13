@@ -34,6 +34,18 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 	// Set up destinations
 	//destinations = std::vector<Ped::Twaypoint*>(destinationsInScenario.begin(), destinationsInScenario.end());
 
+	std::vector<float>* Xptr = agentCollection->getXptr();
+	std::vector<float>* Yptr = agentCollection->getYptr();
+	std::vector<float>* XDesptr = agentCollection->getDesiredXptr();
+	std::vector<float>* YDesptr = agentCollection->getDesiredYptr();
+
+	for (int i = 0; i < (*Xptr).size(); i++){
+		QT_X.push_back(&((*Xptr)[i]));
+		QT_Y.push_back(&((*Yptr)[i]));
+		QT_DesX.push_back(&((*XDesptr)[i]));
+		QT_DesY.push_back(&((*YDesptr)[i]));
+	}
+
 	// This is the sequential implementation
 	implementation = SEQ;
 
@@ -56,7 +68,7 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 // Sequential tick..
 void Ped::Model::seqTick(){
 	agentCollection->computeNextDesiredPositionScalar(0, agentCollection->size());
-	move(0, agentCollection->size());
+	move(QT_X, QT_Y, QT_DesX, QT_DesY);
 	//agentCollection->updateFromDesired(0, agentCollection->size());
 }
 
@@ -175,6 +187,82 @@ void Ped::Model::tick()
 /// Don't use this for Assignment 1!
 ///////////////////////////////////////////////
 
+
+void Ped::Model::move(std::vector<float*>& regionX, std::vector<float*>& regionY, 
+					  std::vector<float*>& regionDesX, std::vector<float*>& regionDesY){
+	for (int i = 0; i < regionX.size(); i++){
+		collisionHandler(i, regionX, regionY, regionDesX, regionDesY);
+	}
+}
+
+
+
+void Ped::Model::collisionHandler(int index,
+								  std::vector<float*>& regionX,
+								  std::vector<float*>& regionY,
+								  std::vector<float*>& regionDesX,
+								  std::vector<float*>& regionDesY){
+
+	// Search for neighboring agents
+	int distanceToNeighbor = 2;
+	std::vector<vector<float*>> neighbors = getNeighbors(regionX, regionY, index, distanceToNeighbor);//Getting all x and y's atm
+	std::vector<float*> neighborX = neighbors[0];
+	std::vector<float*> neighborY = neighbors[1];
+
+	// Retrieve their positions
+	std::vector<std::pair<float, float> > takenPositions;
+	for (int i = 0; i < neighborX.size(); i++) {
+		std::pair<float, float> position((*neighborX[i]), (*neighborY[i]));
+		takenPositions.push_back(position);
+
+	}
+
+	// Compute the three alternative positions that would bring the agent
+	// closer to his desiredPosition, starting with the desiredPosition itself
+	std::vector<std::pair<float, float> > prioritizedAlternatives;
+	std::pair<float, float> pDesired((*regionDesX[index]), (*regionDesY[index]));
+	prioritizedAlternatives.push_back(pDesired);
+
+	int diffX = pDesired.first - (*regionX[index]);
+	int diffY = pDesired.second - (*regionY[index]);
+	std::pair<float, float> p1, p2;
+	if (diffX == 0 || diffY == 0)
+	{
+		// Agent wants to walk straight to North, South, West or East
+		p1 = std::make_pair(pDesired.first + diffY, pDesired.second + diffX);
+		p2 = std::make_pair(pDesired.first - diffY, pDesired.second - diffX);
+	}
+	else {
+		// Agent wants to walk diagonally
+		p1 = std::make_pair(pDesired.first, (*regionY[index]));
+		p2 = std::make_pair((*regionX[index]), pDesired.second);
+	}
+	prioritizedAlternatives.push_back(p1);
+	prioritizedAlternatives.push_back(p2);
+
+	// Find the first empty alternative position
+	for (std::vector<pair<float, float> >::iterator it = prioritizedAlternatives.begin(); it != prioritizedAlternatives.end(); ++it) {
+
+		// If the current position is not yet taken by any neighbor
+		if (std::find(takenPositions.begin(), takenPositions.end(), *it) == takenPositions.end()) {
+
+			// Set the agent's position 
+			//(*agentDesiredXs)[index] = (*it).first;
+			//(*agentDesiredYs)[index] = (*it).second;
+
+			(*regionX[index]) = (*it).first;
+			(*regionY[index]) = (*it).second;
+
+			break;
+		}
+	}
+}
+
+
+
+
+
+
 // Moves the agent to the next desired position. If already taken, it will
 // be moved to a location close to it.
 
@@ -276,6 +364,25 @@ std::vector<vector<float>> Ped::Model::getNeighbors(int x = 1, int y = 1, int di
 	res.push_back(this->agentCollection->getY());
 	res.push_back(this->agentCollection->getDesiredX());
 	res.push_back(this->agentCollection->getDesiredY());
+	return res;
+}
+
+
+std::vector<vector<float*>> Ped::Model::getNeighbors(std::vector<float*> &regionX,
+													std::vector<float*> &regionY,
+													int index,
+													int dist) const {
+
+	//std::vector<float>* agentXs = this->agentCollection->getXptr();
+	//std::vector<float>* agentYs = this->agentCollection->getYptr();
+	//int xTop = x ;
+
+
+	// create the output list
+	// ( It would be better to include only the agents close by, but this programmer is lazy.)	
+	std::vector<std::vector<float*>> res;
+	res.push_back(regionX);
+	res.push_back(regionY);
 	return res;
 }
 

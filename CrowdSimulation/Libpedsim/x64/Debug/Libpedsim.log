@@ -1,4 +1,4 @@
-﻿Build started 2018-02-13 12:42:03.
+﻿Build started 2018-02-13 13:25:47.
      1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /Zi /nologo /W3 /WX- /Od /D WIN32 /D WIN64 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt src\ped_model.cpp
@@ -19,8 +19,10 @@
                      _Ty=float
                  ]
      1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-     1>src\ped_model.cpp(222): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>src\ped_model.cpp(223): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>src\ped_model.cpp(226): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>src\ped_model.cpp(227): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>src\ped_model.cpp(310): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>src\ped_model.cpp(311): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\Libpedsim.lib" /NOLOGO /MACHINE:X64 x64\Debug\cuda_testkernel.cu.obj
          x64\Debug\ped_agent_collection.obj
@@ -43,4 +45,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.33
+Time Elapsed 00:00:01.37
