@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
+#include <atomic>
 
 struct Point{
-	Point(int x, int y)
+	Point(float x, float y)
 	{
 		x = x;
 		y = y;
@@ -13,14 +14,15 @@ struct Point{
 		y = 0;
 	}
 
-	int x;
-	int y;
+	float x;
+	float y;
 };
 
 
 struct Node{
 	Node(){
 		nrAgents = 0;
+		bufferIndex = 0;
 	}
 
 	std::vector<float*> x;
@@ -28,9 +30,15 @@ struct Node{
 	std::vector<float*> desiredX;
 	std::vector<float*> desiredY;
 	int nrAgents;
+	std::atomic<int> bufferIndex;
+	std::vector<std::vector<float*>> buffer; //Really large at all times
+};
 
-	std::vector<std::vector<float*>> buffer;
-	int bufferIndex;
+typedef enum agentIndex{
+	X = 0,
+	Y = 1,
+	DESIRED_X = 2,
+	DESIRED_Y = 3
 };
 
 class QTree{
@@ -57,9 +65,10 @@ class QTree{
 	QTree *topRightTree;
 
 public:
-	QTree(Point topL, Point botR)
+	QTree(Point topL, Point botR, int _level = 0)
 	{
 		data = nullptr;
+		level = _level;
 		botLeftTree = nullptr;
 		botRightTree = nullptr;
 		topLeftTree = nullptr;
@@ -80,9 +89,14 @@ public:
 
 
 	
-	bool inBounds(int x, int y);
+	bool inBounds(float x, float y);
 	bool splitCheck();
-	void insert(/*Agent*/);
+	void insert(std::vector<float*> agent, float sortX, float sortY);
+	void appendBuffer(std::vector<float*>& agent);
 	void flushBuffer();
-	void remove(/*agent*/);
+	bool growTree();
+	void remove(int index);
+	void prune();
+	void saveAgents(QTree* child);
+	int countChildAgents();
 };

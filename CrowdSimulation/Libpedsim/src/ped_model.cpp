@@ -68,7 +68,7 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 // Sequential tick..
 void Ped::Model::seqTick(){
 	agentCollection->computeNextDesiredPositionScalar(0, agentCollection->size());
-	move(QT_X, QT_Y, QT_DesX, QT_DesY);
+	move(/*Region*/);
 	//agentCollection->updateFromDesired(0, agentCollection->size());
 }
 

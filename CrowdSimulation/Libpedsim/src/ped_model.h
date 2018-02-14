@@ -19,6 +19,7 @@
 #include <memory>
 
 #include "ped_agent_collection.h"
+#include "QuadTree.h"
 
 namespace Ped{
 	class Tagent_collection;
