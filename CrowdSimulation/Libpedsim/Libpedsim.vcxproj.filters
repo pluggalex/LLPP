@@ -35,6 +35,7 @@
     <ClCompile Include="src\ped_agent_collection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\QuadTree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\cuda_testkernel.h">
@@ -56,5 +57,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ped_agent_collection.h" />
+    <ClInclude Include="src\QuadTree.h" />
   </ItemGroup>
 </Project>

@@ -72,7 +72,6 @@ namespace Ped {
 
 		Ped::Tagent_collection& operator+=(const Ped::Tagent_collection& rhs);
 
-
 	private:
 		// The agent's current position
 		std::vector<float> x;

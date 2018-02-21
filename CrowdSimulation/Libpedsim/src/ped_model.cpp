@@ -34,8 +34,47 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 	// Set up destinations
 	//destinations = std::vector<Ped::Twaypoint*>(destinationsInScenario.begin(), destinationsInScenario.end());
 
+	
+
+	int xLeft = 0;
+	int xRight = 800;
+	int yTop = 0;
+	int yBot = 600;
+	int treeLevel = 1;
+	/*All the child trees will be deleted within the root node. Promise. Hopefully.*/
+	QTree* childBotLeft = new QTree({ xLeft, yBot / 2 }, { xRight / 2, yBot }, treeLevel, agentCollection->size());
+	QTree* childBotRight = new QTree({ xRight / 2, yBot / 2 }, { xRight, yBot }, treeLevel, agentCollection->size());
+	QTree* childTopLeft = new QTree({ xLeft, yTop }, { xRight / 2, yBot / 2 }, treeLevel, agentCollection->size());
+	QTree* childTopRight = new QTree({ xRight / 2, yTop }, { xRight, yBot / 2 }, treeLevel, agentCollection->size());
+
+	//The root tree. Tree level will automaticly be 0
+	rootRegion = new QTree({ xLeft, yTop }, { xRight, yBot }, 
+							childBotLeft, childBotRight, childTopLeft, childTopRight, agentCollection->size());
+
+
+	/*Get the data we want to distribute over our regions*/
+	std::vector<float>* Xptr = agentCollection->getXptr();
+	std::vector<float>* Yptr = agentCollection->getYptr();
+	std::vector<float>* XDesptr = agentCollection->getDesiredXptr();
+	std::vector<float>* YDesptr = agentCollection->getDesiredYptr();
+	
+	//Temps
+	std::vector<std::vector<float*>> tempBuff;
+	int size = Xptr->size();
+	
+	//Copy pointers to our data to the regions
+	for (int i = 0; i < size; i++){
+		tempBuff.emplace_back(std::initializer_list<float*>{&((*Xptr)[i]), &((*Yptr)[i]), &((*XDesptr)[i]), &((*YDesptr)[i])});
+	}
+	for (auto& agent : tempBuff){
+		rootRegion->insert(agent, (*agent[agentIndex::X]), (*agent[agentIndex::Y]));
+	}
+
+	rootRegion->flushAllBuffers();
+	rootRegion->growAllTrees();
+
 	// This is the sequential implementation
-	implementation = SEQ;
+	implementation = OMP;
 
 	// Set up heatmap (relevant for Assignment 4)
 	setupHeatmapSeq();
@@ -56,7 +95,9 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 // Sequential tick..
 void Ped::Model::seqTick(){
 	agentCollection->computeNextDesiredPositionScalar(0, agentCollection->size());
-	move(0, agentCollection->size());
+	std::vector<QTree*> leafNodes = rootRegion->getLeafNodes();
+	for (auto leaf : leafNodes)
+		move(leaf);
 	//agentCollection->updateFromDesired(0, agentCollection->size());
 }
 
@@ -65,11 +106,29 @@ void Ped::Model::ompTick(){
 	#pragma omp parallel
 	{
 		int thread_id = omp_get_thread_num();
-		int start = (*chunks)[thread_id] * thread_id;
-		int end = (*chunks)[thread_id] * (thread_id + 1);
+		int prevId = 0;
+		int start = 0;// (*chunks)[thread_id] * thread_id;
+
+		if (thread_id - 1 >= 0){
+			prevId = thread_id - 1;
+			start = (*chunks)[prevId];
+		}
+		int end = start + (*chunks)[thread_id];
 
 		agentCollection->computeNextDesiredPositionScalar(start, end);
-		agentCollection->updateFromDesired(start, end);
+		
+		#pragma omp barrier
+		
+		
+		start = 0;
+		if (thread_id - 1 >= 0){
+			prevId = thread_id - 1;
+			start = (*leafChunks)[prevId];
+		}
+		end = start + (*leafChunks)[thread_id];
+		for (int chunk = start; chunk < end; chunk++)
+			move(leafNodes[chunk]);
+		//agentCollection->updateFromDesired(start, end);
 	}	
 }
 
@@ -80,10 +139,10 @@ void Ped::Model::ompTick(){
 */
 void Ped::Model::computeAgentsInRange_version2(int start, int end, int threadId){
 	while (threadCompActive){
-
 		// Wait for the go signal from tick()
 		WaitForSingleObject(agentComputationSem[threadId], INFINITE);
 		
+		//Do the work
 		agentCollection->computeNextDesiredPositionVector(start, end);
 		agentCollection->updateFromDesired(start, end);
 
@@ -127,6 +186,18 @@ void Ped::Model::pthreadPrepTick(){
 	}
 }
 
+void Ped::Model::chunkUpRegions(){
+	leafNodes = this->rootRegion->getLeafNodes();
+	int totalSize = leafNodes.size();
+	int chunkSize = totalSize / threadNum;
+	int rest = totalSize % threadNum;
+
+	leafChunks = new std::vector<int>(threadNum, chunkSize);
+	for (int i = 0; i < rest; i++){
+		(*leafChunks)[i]++;
+	}
+}
+
 // Splits up the workload on N number of chunks where N is the number of threads in use
 void Ped::Model::chunkUp(){
 	int totalSize = this->agentCollection->size();
@@ -148,7 +219,12 @@ void Ped::Model::chunkUp(){
 
 void Ped::Model::tick()
 {
-	// EDIT HERE FOR ASSIGNMENT 1
+	//std::cout << "-------------------------------------------------\n"
+	//		  << "                 START TICK\n"
+	//		  << "-------------------------------------------------\n";
+
+	
+	chunkUpRegions();
 
 	switch (this->implementation){
 	case SEQ:
@@ -167,7 +243,16 @@ void Ped::Model::tick()
 		break;
 	}
 
-
+	rootRegion->flushAllBuffers();
+	rootRegion->purgeAllRegions();
+	rootRegion->growAllTrees();
+	/*std::vector<QTree*>leafs = rootRegion->getLeafNodes();
+	for (auto& leaf : leafs)
+		leaf->printCorners();
+	std::cout << "-------------------------------------------------\n"
+		      << "                 END TICK\n"
+			  << "-------------------------------------------------\n";
+			  */
 }
 
 ////////////
@@ -175,109 +260,121 @@ void Ped::Model::tick()
 /// Don't use this for Assignment 1!
 ///////////////////////////////////////////////
 
-// Moves the agent to the next desired position. If already taken, it will
-// be moved to a location close to it.
 
-void Ped::Model::move(int start, int end)
-{
-
-	std::vector<float>* agentXs = this->agentCollection->getXptr();
-	std::vector<float>* agentYs = this->agentCollection->getYptr();
-
-	std::vector<float>* agentDesiredXs = this->agentCollection->getDesiredXptr();
-	std::vector<float>* agentDesiredYs = this->agentCollection->getDesiredYptr();
-
-	for (int i = start; i < end; i++){
-		collisionHandler(i, agentXs, agentYs, agentDesiredXs, agentDesiredYs);
+void Ped::Model::move(QTree* region){
+	for (int i = 0; i < region->getXs().size(); i++){
+		collisionHandler(i, region);
 	}
 }
 
-void Ped::Model::collisionHandler(int index, 
-									std::vector<float>* agentXs, 
-									std::vector<float>* agentYs,	
-									std::vector<float>* agentDesiredXs, 
-									std::vector<float>* agentDesiredYs){
-	// Search for neighboring agents
-	std::vector<vector<float>> neighbors = getNeighbors(1,2,3);//Getting all x and y's atm
-	std::vector<float> neighborX = neighbors[0];
-	std::vector<float> neighborY = neighbors[1];
-	std::vector<float> neighborDesiredX = neighbors[0];
-	std::vector<float> neighborDesiredY = neighbors[0];
+std::vector<std::pair<float, float>> calcNeighbors(float x, float y, int minX, int minY, int maxX, int maxY){
+	std::vector<std::pair<float, float>> neighbors;
+	float nX, nY;
+	for (float i = -1; i < 2; i++){
+		for (float j = -1; j < 2; j++){
+			nY = i + y;
+			nX = j + x;
+			if (nX >= minX && nX < maxX && nY >= minY && nY < maxY && !(nX == x && nY == y)){
+				neighbors.push_back(std::pair<float, float>(nX, nY));
+			}
+			if (nX == 0 && nY == 1)
+				std::cout << "shit" << " (" << x << "," << y << ")";
+		}
+	}
+	return neighbors;
+}
+
+void Ped::Model::collisionHandler(int index, QTree* region){
+
+	std::vector<float*> regionXs = region->getXs();
+	std::vector<float*> regionYs = region->getYs();
+	float* currentX = regionXs[index];
+	float* currentY = regionYs[index];
+	std::pair<int, int> topLeft = region->getTopLeft();
+	std::pair<int, int> botRight = region->getBotRight();
+	std::vector<std::pair<float, float>> neighbors = calcNeighbors(*currentX, *currentY,
+																   topLeft.first, topLeft.second,
+																   botRight.first, botRight.second);
 
 	// Retrieve their positions
 	std::vector<std::pair<float, float> > takenPositions;
-	for (int i = 0; i < neighborX.size(); i++) {
-		std::pair<float, float> position(neighborX[i], neighborY[i]);
-		takenPositions.push_back(position);
-		//std::pair<float, float> position2(neighborDesiredX[i], neighborDesiredY[i]);
-		//takenPositions.push_back(position2);
+
+	for (int i = 0; i < regionXs.size(); i++){
+		for (auto neighbor : neighbors){
+			if (*(regionXs[i]) == neighbor.first && *(regionYs[i]) == neighbor.second)
+				takenPositions.push_back(neighbor);
+		}
 	}
 
 	// Compute the three alternative positions that would bring the agent
 	// closer to his desiredPosition, starting with the desiredPosition itself
 	std::vector<std::pair<float, float> > prioritizedAlternatives;
-	std::pair<float, float> pDesired((*agentDesiredXs)[index], (*agentDesiredYs)[index]);
+	std::pair<float, float> pDesired((*region->getDesiredXs()[index]), (*region->getDesiredYs()[index]));
 	prioritizedAlternatives.push_back(pDesired);
 
-	int diffX = pDesired.first - (*agentXs)[index];
-	int diffY = pDesired.second - (*agentYs)[index];
-	std::pair<float, float> p1, p2;
-	if (diffX == 0 || diffY == 0)
-	{
-		// Agent wants to walk straight to North, South, West or East
-		p1 = std::make_pair(pDesired.first + diffY, pDesired.second + diffX);
-		p2 = std::make_pair(pDesired.first - diffY, pDesired.second - diffX);
+	/*if (pDesired.first == *currentX && pDesired.second == *currentY){
+		std::cout << "ojoj!";
 	}
-	else {
-		// Agent wants to walk diagonally
-		p1 = std::make_pair(pDesired.first, (*agentYs)[index]);
-		p2 = std::make_pair((*agentXs)[index], pDesired.second);
+	*/
+
+	int desiredIndex = -1;
+	for (int i = 0; i < neighbors.size(); i++){
+		if (neighbors[i].first == pDesired.first  && neighbors[i].second == pDesired.second){
+			desiredIndex = i;
+			break;
+		}
 	}
-	prioritizedAlternatives.push_back(p1);
-	prioritizedAlternatives.push_back(p2);
+
+	if (desiredIndex != -1){
+		int leftIndex, rightIndex;
+		for (int i = 1; i <= (neighbors.size() - 1) / 2; i++){
+			leftIndex = desiredIndex - i;
+			if (leftIndex < 0)
+				leftIndex = neighbors.size() + leftIndex;
+
+			rightIndex = desiredIndex + i;
+			if (rightIndex > neighbors.size() - 1)
+				rightIndex = rightIndex - neighbors.size();
+
+			prioritizedAlternatives.push_back(neighbors[leftIndex]);
+			prioritizedAlternatives.push_back(neighbors[rightIndex]);
+
+		}
+	}
+
+	if (neighbors.size() > 0 && (neighbors.size() - 1) % 2){
+		int i = ((neighbors.size() - 1) / 2) + desiredIndex + 1;
+		if (i > neighbors.size() - 1)
+			i = i - neighbors.size();
+		prioritizedAlternatives.push_back(neighbors[i]);
+	}
 
 	// Find the first empty alternative position
 	for (std::vector<pair<float, float> >::iterator it = prioritizedAlternatives.begin(); it != prioritizedAlternatives.end(); ++it) {
 
 		// If the current position is not yet taken by any neighbor
 		if (std::find(takenPositions.begin(), takenPositions.end(), *it) == takenPositions.end()) {
+			float desiredX = (*it).first;
+			float desiredY = (*it).second;
+			float* x = region->getXs()[index];
+			float* y = region->getYs()[index];
+			float* prioDesX = region->getDesiredXs()[index];
+			float* prioDesY = region->getDesiredYs()[index];
 
-			// Set the agent's position 
-			//(*agentDesiredXs)[index] = (*it).first;
-			//(*agentDesiredYs)[index] = (*it).second;
-
-			(*agentXs)[index] = (*it).first;
-			(*agentYs)[index] = (*it).second;
-
-			break;
+			if (!(region->inBounds(desiredX, desiredY))){// && rootRegion->isCoordFree(desiredX, desiredY)){
+				region->remove(*x, *y, index);
+				rootRegion->insert(std::vector<float*>{x, y, prioDesX, prioDesY}, std::vector<std::pair<float, float>>(it, prioritizedAlternatives.end()));
+				break;
+			}
+			else if (region->inBounds(desiredX, desiredY)){
+				(*x) = desiredX;
+				(*y) = desiredY;
+				break;
+			}
 		}
 	}
 }
 
-
-/// Returns the list of neighbors within dist of the point x/y. This
-/// can be the position of an agent, but it is not limited to this.
-/// \date    2012-01-29
-/// \return  The list of neighbors
-/// \param   x the x coordinate
-/// \param   y the y coordinate
-/// \param   dist the distance around x/y that will be searched for agents (search field is a square in the current implementation)
-std::vector<vector<float>> Ped::Model::getNeighbors(int x = 1, int y = 1, int dist = 1) const {
-
-	//std::vector<float>* agentXs = this->agentCollection->getXptr();
-	//std::vector<float>* agentYs = this->agentCollection->getYptr();
-	//int xTop = x ;
-
-
-	// create the output list
-	// ( It would be better to include only the agents close by, but this programmer is lazy.)	
-	std::vector<std::vector<float>> res;
-	res.push_back(this->agentCollection->getX());
-	res.push_back(this->agentCollection->getY());
-	res.push_back(this->agentCollection->getDesiredX());
-	res.push_back(this->agentCollection->getDesiredY());
-	return res;
-}
 
 void Ped::Model::cleanup() {
 	// Nothing to do here right now. 
@@ -310,4 +407,6 @@ Ped::Model::~Model()
 	std::for_each(agentCompletionSem.begin(), agentCompletionSem.end(), [](HANDLE sem){CloseHandle(sem); });
 	
 	delete chunks;
+	delete leafChunks;
+	delete rootRegion;
 }

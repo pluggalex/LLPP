@@ -74,21 +74,22 @@ void MainWindow::paint() {
 	std::vector<float> agentVectorY = model.getAgents()->getY();
 	auto yIterator = agentVectorY.begin();
 	auto xEnd = agentVectorX.end();
-
+	int i = 0;//Remove
 	for (; xIterator != xEnd;)
 	{
 		size_t tupleSizeBeforeInsert = positionsTaken.size();
 		positionsTaken.insert(std::make_pair(*xIterator, *yIterator));
 		size_t tupleSizeAfterInsert = positionsTaken.size();
 
-		
 		if (tupleSizeBeforeInsert != tupleSizeAfterInsert) {
 			colors.push_back(Qt::green);
 		}
 		else {
 			colors.push_back(Qt::red);
+			std::cout << "Red - " << "x: " << *xIterator << " y: " << *yIterator << "\n";
 		}
 
+		i++;//Remove
 		xIterator++; 
 		yIterator++;
 	}

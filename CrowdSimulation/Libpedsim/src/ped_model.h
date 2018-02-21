@@ -19,6 +19,7 @@
 #include <memory>
 
 #include "ped_agent_collection.h"
+#include "QuadTree.h"
 
 namespace Ped{
 	class Tagent_collection;
@@ -52,6 +53,7 @@ namespace Ped{
 
 		// Helper to split up the workload in chunks
 		void chunkUp();
+		void chunkUpRegions();
 
 		// Go from iterator start to end and set X and Y for the agents in that range
 		//void computeAgentsInRange(std::vector<Tagent*>::iterator, std::vector<Tagent*>::iterator);
@@ -99,23 +101,21 @@ namespace Ped{
 
 		//chunks containing the workload for each thread
 		std::vector<int> *chunks;
+		std::vector<int> *leafChunks;
 
 		// Moves an agent towards its next position
-		void move(int, int);
+		//void move(int, int);
 
-		
+		void move(QTree* region);
+
+		//Mock objects, will be replaced. Hopefully.
+		QTree* rootRegion;
+		std::vector<QTree*> leafNodes;
 		////////////
 		/// Everything below here won't be relevant until Assignment 3
 		///////////////////////////////////////////////
 
-		// Returns the set of neighboring agents for the specified position
-		std::vector<vector<float>> getNeighbors(int x, int y, int dist) const;
-
-		void collisionHandler(int index, 
-								std::vector<float>* agentXs, 
-								std::vector<float>* agentY, 
-								std::vector<float>* agentDesiredXs, 
-								std::vector<float>*);
+		void collisionHandler(int index, QTree* region);
 
 		////////////
 		/// Everything below here won't be relevant until Assignment 4

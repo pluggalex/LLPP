@@ -165,7 +165,16 @@ void ParseScenario::createAgents()
 	{
 		int xPos = x + qrand() / (RAND_MAX / dx) - dx / 2;
 		int yPos = y + qrand() / (RAND_MAX / dy) - dy / 2;
-		tempAgents->addAgent(xPos, yPos);
+
+		auto x = tempAgents->getX();
+		auto y = tempAgents->getY();
+		bool available = true;
+		for (int pos = 0; pos < x.size(); pos++){
+			if (x[pos] == xPos && y[pos] == yPos)
+				available = false;
+		}
+		if (available)
+			tempAgents->addAgent(xPos, yPos);
 	}
 }
 
