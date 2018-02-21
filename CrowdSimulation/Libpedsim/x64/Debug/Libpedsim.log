@@ -1,7 +1,7 @@
-﻿Build started 2018-02-14 12:59:24.
+﻿Build started 2018-02-21 16:46:41.
      1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\Libpedsim.vcxproj" on node 2 (Rebuild target(s)).
      1>CudaClean:
-         cmd.exe /C "C:\Users\alla7073\AppData\Local\Temp\tmpa19018713b5b48a8b79c4ac580df818c.cmd"
+         cmd.exe /C "C:\Users\alla7073\AppData\Local\Temp\tmp02aa0fadd7ed49bda4a39056a8e49f2e.cmd"
          "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile   -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu" -clean
          
          C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile   -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu" -clean 
@@ -10,7 +10,7 @@
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWIN32 /DWIN64 /D_DEBUG /D_CONSOLE /D_MBCS /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" /I. /FIcuda_runtime.h /c C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu 
        CudaBuild:
          Compiling CUDA source file src\cuda_testkernel.cu...
-         cmd.exe /C "C:\Users\alla7073\AppData\Local\Temp\tmpf7a76aa737ff4bceaff784668136cbc7.cmd"
+         cmd.exe /C "C:\Users\alla7073\AppData\Local\Temp\tmp23ed7f8bbcc744918d50af277029b2e9.cmd"
          "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu"
          
          C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2013 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"  -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MDd " -o x64\Debug\cuda_testkernel.cu.obj "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Libpedsim\src\cuda_testkernel.cu" 
@@ -66,10 +66,14 @@
                      _Ty=float
                  ]
      1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_agent_collection.h(39): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-     1>src\ped_model.cpp(226): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>src\ped_model.cpp(227): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>src\ped_model.cpp(310): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>src\ped_model.cpp(311): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>src\ped_model.cpp(63): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(191): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(333): warning C4267: '=' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(337): warning C4267: '=' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(346): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(348): warning C4267: '=' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\ped_model.cpp(364): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>src\ped_model.cpp(369): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
          ped_agent.cpp
          heatmap_seq.cpp
      1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\ped_waypoints.h(70): warning C4251: 'Ped::waypoints::waypointX' : class 'std::vector<std::vector<float,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>>' needs to have dll-interface to be used by clients of class 'Ped::waypoints'
@@ -114,8 +118,12 @@
      1>src\ped_agent_collection.cpp(61): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
      1>src\ped_agent_collection.cpp(155): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
          QuadTree.cpp
-     1>src\QuadTree.cpp(48): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\QuadTree.cpp(38): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>src\QuadTree.cpp(78): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>src\QuadTree.cpp(126): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>src\QuadTree.cpp(172): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
          Generating Code...
+     1>c:\users\alla7073\downloads\crowdsimulation2018\crowdsimulation\libpedsim\src\quadtree.cpp(408): warning C4715: 'QTree::isCoordFree' : not all control paths return a value
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\x64\Debug\Libpedsim.lib" /NOLOGO /MACHINE:X64 x64\Debug\cuda_testkernel.cu.obj
          x64\Debug\QuadTree.obj
@@ -139,4 +147,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:09.73
+Time Elapsed 00:00:10.02

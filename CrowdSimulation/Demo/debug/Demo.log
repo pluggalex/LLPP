@@ -1,4 +1,4 @@
-﻿Build started 2018-02-14 12:59:33.
+﻿Build started 2018-02-21 16:46:51.
      1>Project "C:\Users\alla7073\Downloads\CrowdSimulation2018\CrowdSimulation\Demo\Demo.vcxproj" on node 2 (Rebuild target(s)).
      1>CustomBuild:
          MOC src/ParseScenario.h
@@ -79,4 +79,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:13.93
+Time Elapsed 00:00:14.91

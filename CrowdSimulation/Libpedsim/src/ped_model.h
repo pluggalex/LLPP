@@ -53,6 +53,7 @@ namespace Ped{
 
 		// Helper to split up the workload in chunks
 		void chunkUp();
+		void chunkUpRegions();
 
 		// Go from iterator start to end and set X and Y for the agents in that range
 		//void computeAgentsInRange(std::vector<Tagent*>::iterator, std::vector<Tagent*>::iterator);
@@ -100,42 +101,21 @@ namespace Ped{
 
 		//chunks containing the workload for each thread
 		std::vector<int> *chunks;
+		std::vector<int> *leafChunks;
 
 		// Moves an agent towards its next position
-		void move(int, int);
+		//void move(int, int);
 
-		void move(std::vector<float*>& regionalX, std::vector<float*>& regionalY,
-				  std::vector<float*>& regionalDesX, std::vector<float*>& regionalDesY);
+		void move(QTree* region);
 
 		//Mock objects, will be replaced. Hopefully.
-		std::vector<float*> QT_X;
-		std::vector<float*> QT_Y;
-		std::vector<float*> QT_DesX;
-		std::vector<float*> QT_DesY;
-		
+		QTree* rootRegion;
+		std::vector<QTree*> leafNodes;
 		////////////
 		/// Everything below here won't be relevant until Assignment 3
 		///////////////////////////////////////////////
 
-		// Returns the set of neighboring agents for the specified position
-		std::vector<vector<float>> getNeighbors(int x, int y, int dist) const;
-
-		std::vector<vector<float*>> getNeighbors(std::vector<float*> &regionX, 
-												std::vector<float*> &regionY, 
-												int index, 
-												int dist) const;
-
-		void collisionHandler(int index, 
-								std::vector<float>* agentXs, 
-								std::vector<float>* agentY, 
-								std::vector<float>* agentDesiredXs, 
-								std::vector<float>*);
-
-		void collisionHandler(int index,
-							  std::vector<float*>& regionXs,
-							  std::vector<float*>& regionYs,
-							  std::vector<float*>& regionDesiredXs,
-							  std::vector<float*>& regionDesiredYs);
+		void collisionHandler(int index, QTree* region);
 
 		////////////
 		/// Everything below here won't be relevant until Assignment 4
