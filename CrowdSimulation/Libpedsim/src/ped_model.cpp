@@ -76,6 +76,7 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 	// This is the sequential implementation
 	implementation = OMP;
 
+
 	// Set up heatmap (relevant for Assignment 4)
 	setupHeatmapSeq();
 
