@@ -238,7 +238,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClCompile Include="src\ped_model.cpp" />
     <ClCompile Include="src\ped_vector.cpp" />
     <ClCompile Include="src\ped_waypoint.cpp" />
-    <ClCompile Include="src\ped_waipoints.cpp" />
+    <ClCompile Include="src\ped_waypoints.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\QuadTree.h" />

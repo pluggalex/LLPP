@@ -126,7 +126,7 @@ namespace Ped{
 #define SCALED_SIZE SIZE*CELLSIZE
 
 		// The heatmap representing the density of agents
-		int ** heatmap;
+		std::atomic<int> ** heatmap;
 
 		// The scaled heatmap that fits to the view
 		int ** scaled_heatmap;
@@ -135,7 +135,7 @@ namespace Ped{
 		int ** blurred_heatmap;
 
 		void setupHeatmapSeq();
-		//void updateHeatmapSeq();
+		void updateHeatmapSeq();
 	};
 }
 #endif

@@ -31,11 +31,6 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 	// Set 
 	agentCollection = std::move(_agentCollection);
 
-	// Set up destinations
-	//destinations = std::vector<Ped::Twaypoint*>(destinationsInScenario.begin(), destinationsInScenario.end());
-
-	
-
 	int xLeft = 0;
 	int xRight = 800;
 	int yTop = 0;
@@ -74,7 +69,7 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 	rootRegion->growAllTrees();
 
 	// This is the sequential implementation
-	implementation = OMP;
+	implementation = SEQ;
 
 
 	// Set up heatmap (relevant for Assignment 4)
@@ -93,13 +88,14 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 }
 
 
-// Sequential tick..
+// Sequential tick
 void Ped::Model::seqTick(){
 	agentCollection->computeNextDesiredPositionScalar(0, agentCollection->size());
 	std::vector<QTree*> leafNodes = rootRegion->getLeafNodes();
 	for (auto leaf : leafNodes)
 		move(leaf);
 	//agentCollection->updateFromDesired(0, agentCollection->size());
+	updateHeatmapSeq();
 }
 
 

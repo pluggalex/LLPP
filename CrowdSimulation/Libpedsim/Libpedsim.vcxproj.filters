@@ -29,13 +29,13 @@
     <ClCompile Include="src\ped_vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ped_waipoints.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ped_agent_collection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\QuadTree.cpp" />
+    <ClCompile Include="src\ped_waypoints.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\cuda_testkernel.h">
