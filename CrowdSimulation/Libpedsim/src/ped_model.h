@@ -128,10 +128,12 @@ namespace Ped{
 		// The heatmap representing the density of agents
 		int ** heatmap;
 		int * d_heatmap;
-		//size_t* pitch;
+		int * d_heatmap_row_size;
 
 		// The scaled heatmap that fits to the view
 		int ** scaled_heatmap;
+		int * d_scaled_heatmap;
+		int * d_scaled_heatmap_row_size;
 
 		// The final heatmap: blurred and scaled to fit the view
 		int ** blurred_heatmap;

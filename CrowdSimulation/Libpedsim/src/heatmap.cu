@@ -37,6 +37,16 @@ void Ped::Model::setupHeatmapSeq()
 	//enum cudaError malloc_status = cudaMallocPitch((void**)&d_heatmap, pitch, SIZE*sizeof(int), SIZE*sizeof(int));
 	//enum cudaError memcpy_status = cudaMemcpy(d_heatmap, heatmap, SIZE*SIZE*sizeof(int), cudaMemcpyHostToDevice);
 
+	enum cudaError malloc_status = cudaMalloc((void**)&d_heatmap, SIZE*SIZE*sizeof(int));
+	malloc_status = cudaMalloc((void**)&d_heatmap_row_size, sizeof(int));
+	enum cudaError memset_status = cudaMemset(d_heatmap_row_size, SIZE, sizeof(int));
+
+	malloc_status = cudaMalloc((void**)&d_scaled_heatmap, SIZE*SIZE*CELLSIZE*CELLSIZE*sizeof(int));
+	memset_status = cudaMemset(d_scaled_heatmap, 0, SIZE*SIZE*CELLSIZE*CELLSIZE*sizeof(int));
+
+	malloc_status = cudaMalloc((void**)&d_scaled_heatmap_row_size, sizeof(int));
+	memset_status = cudaMemset(d_scaled_heatmap_row_size, SIZE*CELLSIZE, sizeof(int));
+	
 }
 
 /*
@@ -52,8 +62,8 @@ heatmap[y][x] = (int)round(heatmap[y][x] * 0.80);
 __global__
 void fade(int* d_heatmap){
 	// heat fades
-	int xy = threadIdx.x + blockIdx.x * blockDim.x;
-	d_heatmap[xy] = __double2int_rd(d_heatmap[xy] * 0.80);
+	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+	d_heatmap[tid] = __double2int_rd(d_heatmap[tid] * 0.80);
 }
 
 __global__
@@ -68,18 +78,46 @@ void locationContention(int* d_heatmap, float* d_desiredXs, float* d_desiredYs, 
 	}
 }
 
+__global__
+void ceiling(int* d_heatmap){
+	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+	int ceiling = 255;
+	if (d_heatmap[tid] > ceiling)
+		d_heatmap[tid] = ceiling;
+}
+
+__global__
+void scale(int* d_scaled_heatmap, int* d_scaled_heatmap_row_size, int* d_heatmap, int* d_heatmap_row_size){
+	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+	int cellsize = 5;
+	int s_row_size = 1024 * 5;
+	int s_row = __double2int_rd(tid / s_row_size);//__double2int_rd(blockIdx.x / cellsize);
+	int s_col = tid;
+	if (s_row)
+		s_col = tid - s_row * s_row_size;
+
+	int row = s_row / cellsize;
+	int col = s_col / cellsize;
+	int index = col + row * 1024;// (*d_heatmap_row_size);
+	d_scaled_heatmap[tid] = d_heatmap[index];
+
+	//if (tid == 1024)
+	//	printf("s_row: %d, s_col: %d, row: %d, col:%d, s_row_size:%d\n", s_row, s_col, row, col, s_row_size);
+}
+
 // Updates the heatmap according to the agent positions
 void Ped::Model::updateHeatmapSeq()
 {
-	enum cudaError malloc_status = cudaMalloc((void**)&d_heatmap, SIZE*SIZE*sizeof(int));
+	//INIT d_heatmap
 	enum cudaError memcpy_status = cudaMemcpy(d_heatmap, heatmap[0], SIZE*SIZE*sizeof(int), cudaMemcpyHostToDevice);
 	int threadsPerBlock = 512;
 	int blocks = SIZE*SIZE / threadsPerBlock;
 	
+	//Fade heatmap
 	fade << <blocks, threadsPerBlock >> >(d_heatmap);
 	enum cudaError sync_status = cudaDeviceSynchronize();
-	cudaMemcpy(heatmap[0], d_heatmap, SIZE*SIZE*sizeof(int), cudaMemcpyDeviceToHost);
 	
+	//Init desireds for cuda
 	vector<float> tempx = agentCollection->getDesiredX();
 	vector<float> tempy = agentCollection->getDesiredY();
 	float* Xs = &(tempx[0]);
@@ -98,37 +136,21 @@ void Ped::Model::updateHeatmapSeq()
 	cudaMalloc(&d_desiredYs, no_agents*sizeof(float));
 	cudaMemcpy(d_desiredYs, Ys, no_agents*sizeof(float), cudaMemcpyHostToDevice);
 
+	//Set location contention based on desired
 	locationContention <<<blocks, threadsPerBlock>>>(d_heatmap, d_desiredXs, d_desiredYs, d_size);
+	sync_status = cudaDeviceSynchronize();
+	
+	//Cut of values to max 255
+	ceiling<< <blocks, threadsPerBlock >> >(d_heatmap);
 	cudaMemcpy(heatmap[0], d_heatmap, SIZE*SIZE*sizeof(int), cudaMemcpyDeviceToHost);
 	sync_status = cudaDeviceSynchronize();
-	//Barier need to wait for the mess up stairs to clear before fixing the max heat color bellow
-
-	for (int x = 0; x < SIZE; x++)
-	{
-		for (int y = 0; y < SIZE; y++)
-		{
-			heatmap[y][x] = heatmap[y][x] < 255 ? heatmap[y][x] : 255;
-		}
-	}
 
 	// Scale the data for visual representation
-	for (int y = 0; y < SIZE; y++)
-	{
-		for (int x = 0; x < SIZE; x++)
-		{
-			int value = heatmap[y][x];
-			//if (value != 0)
-			//	printf("heatmap[%d][%d] = %ld\n", y, x, value);
-			for (int cellY = 0; cellY < CELLSIZE; cellY++)
-			{
-				for (int cellX = 0; cellX < CELLSIZE; cellX++)
-				{
-					scaled_heatmap[y * CELLSIZE + cellY][x * CELLSIZE + cellX] = value;
-				}
-			}
-		}
-	}
-
+	blocks = SIZE*SIZE*CELLSIZE*CELLSIZE / threadsPerBlock;
+	scale << <blocks, threadsPerBlock >> >(d_scaled_heatmap, d_scaled_heatmap_row_size, d_heatmap, d_heatmap_row_size);
+	cudaMemcpy(scaled_heatmap[0], d_scaled_heatmap, SIZE*SIZE*CELLSIZE*CELLSIZE*sizeof(int), cudaMemcpyDeviceToHost);
+	sync_status = cudaDeviceSynchronize();
+	
 	// Weights for blur filter
 	const int w[5][5] = {
 		{ 1, 4, 7, 4, 1 },
@@ -137,7 +159,7 @@ void Ped::Model::updateHeatmapSeq()
 		{ 4, 16, 26, 16, 4 },
 		{ 1, 4, 7, 4, 1 }
 	};
-
+	int val = 0;
 #define WEIGHTSUM 273
 	// Apply gaussian blurfilter		       
 	for (int i = 2; i < SCALED_SIZE - 2; i++)
@@ -149,6 +171,9 @@ void Ped::Model::updateHeatmapSeq()
 			{
 				for (int l = -2; l < 3; l++)
 				{
+					//int val =  scaled_heatmap[i + k][j + l];
+					//if (val != 0)
+					//	printf("123");
 					sum += w[2 + k][2 + l] * scaled_heatmap[i + k][j + l];
 				}
 			}
