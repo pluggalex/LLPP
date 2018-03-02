@@ -12,11 +12,9 @@
     <CudaCompile Include="src\cuda_testkernel.cu">
       <Filter>Source Files</Filter>
     </CudaCompile>
+    <CudaCompile Include="src\heatmap.cu" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\heatmap_seq.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ped_agent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -34,6 +32,9 @@
     </ClCompile>
     <ClCompile Include="src\QuadTree.cpp" />
     <ClCompile Include="src\ped_waypoints.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\heatmap_seq.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -58,5 +59,6 @@
     </ClInclude>
     <ClInclude Include="src\ped_agent_collection.h" />
     <ClInclude Include="src\QuadTree.h" />
+    <ClInclude Include="src\heatmap.h" />
   </ItemGroup>
 </Project>

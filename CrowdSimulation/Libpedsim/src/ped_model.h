@@ -126,7 +126,9 @@ namespace Ped{
 #define SCALED_SIZE SIZE*CELLSIZE
 
 		// The heatmap representing the density of agents
-		std::atomic<int> ** heatmap;
+		int ** heatmap;
+		int * d_heatmap;
+		//size_t* pitch;
 
 		// The scaled heatmap that fits to the view
 		int ** scaled_heatmap;

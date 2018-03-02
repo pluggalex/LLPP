@@ -200,6 +200,9 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <CodeGeneration>compute_20,sm_20</CodeGeneration>
+      <GPUDebugInfo>true</GPUDebugInfo>
+      <GenerateLineInfo>true</GenerateLineInfo>
+      <HostDebugInfo>true</HostDebugInfo>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='timing-release|x64'">
@@ -239,8 +242,14 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClCompile Include="src\ped_vector.cpp" />
     <ClCompile Include="src\ped_waypoint.cpp" />
     <ClCompile Include="src\ped_waypoints.cpp" />
+    <CudaCompile Include="src\heatmap.cu">
+      <FileType>CppCode</FileType>
+      <GPUDebugInfo Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GPUDebugInfo>
+      <GenerateLineInfo Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateLineInfo>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\heatmap.h" />
     <ClInclude Include="src\QuadTree.h" />
     <ClInclude Include="src\ped_agent_collection.h" />
     <ClInclude Include="src\ped_waypoints.h" />

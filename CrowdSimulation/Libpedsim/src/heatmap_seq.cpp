@@ -2,10 +2,11 @@
 //
 // Implements the heatmap functionality. 
 //
-#include "ped_model.h"
+/*#include "ped_model.h"
 
 #include <cstdlib>
 #include <iostream>
+
 using namespace std;
 
 // Memory leak check with msvc++
@@ -20,11 +21,11 @@ using namespace std;
 // Sets up the heatmap
 void Ped::Model::setupHeatmapSeq()
 {
-	std::atomic<int> *hm = (std::atomic<int>*)calloc(SIZE*SIZE, sizeof(std::atomic<int>));
+	int *hm = (int*)calloc(SIZE*SIZE, sizeof(int));
 	int *shm = (int*)malloc(SCALED_SIZE*SCALED_SIZE*sizeof(int));
 	int *bhm = (int*)malloc(SCALED_SIZE*SCALED_SIZE*sizeof(int));
 
-	heatmap = (std::atomic<int>**)malloc(SIZE*sizeof(std::atomic<int>*));
+	heatmap = (int**)malloc(SIZE*sizeof(int*));
 
 	scaled_heatmap = (int**)malloc(SCALED_SIZE*sizeof(int*));
 	blurred_heatmap = (int**)malloc(SCALED_SIZE*sizeof(int*));
@@ -40,9 +41,11 @@ void Ped::Model::setupHeatmapSeq()
 	}
 }
 
+
 // Updates the heatmap according to the agent positions
 void Ped::Model::updateHeatmapSeq()
 {
+
 	for (int x = 0; x < SIZE; x++)
 	{
 		for (int y = 0; y < SIZE; y++)
@@ -54,8 +57,6 @@ void Ped::Model::updateHeatmapSeq()
 
 	auto desiredXs = agentCollection->getDesiredX();
 	auto desiredYs = agentCollection->getDesiredY();
-	int heatmapValue = 0;
-	int newHeatmapValue = 0;
 	// Count how many agents want to go to each location
 	for (int i = 0; i < agentCollection->size(); i++)
 	{
@@ -68,13 +69,7 @@ void Ped::Model::updateHeatmapSeq()
 		}
 
 		// intensify heat for better color results
-		heatmapValue = heatmap[y][x].load(std::memory_order_relaxed);
-		newHeatmapValue = heatmapValue + 40;
-		while (!(heatmap[y][x]).compare_exchange_weak(heatmapValue, newHeatmapValue,
-			std::memory_order_release,
-			std::memory_order_relaxed)){
-			newHeatmapValue = heatmapValue + 40;
-		}
+		heatmap[y][x] += 40;
 	}
 
 	//Barier need to wait for the mess up stairs to clear before fixing the max heat color bellow
@@ -83,7 +78,7 @@ void Ped::Model::updateHeatmapSeq()
 	{
 		for (int y = 0; y < SIZE; y++)
 		{
-			heatmap[y][x].store(heatmap[y][x].load() < 255 ? heatmap[y][x].load() : 255);
+			heatmap[y][x] = heatmap[y][x] < 255 ? heatmap[y][x] : 255;
 		}
 	}
 
@@ -135,3 +130,4 @@ void Ped::Model::updateHeatmapSeq()
 int Ped::Model::getHeatmapSize() const {
 	return SCALED_SIZE;
 }
+*/

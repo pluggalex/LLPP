@@ -7,7 +7,6 @@
 //
 #include "ped_model.h"
 #include "ped_waypoint.h"
-#include "ped_model.h"
 #include <iostream>
 #include <stack>
 #include <algorithm>
@@ -106,8 +105,7 @@ void Ped::Model::ompTick(){
 		int prevId = 0;
 		int start = 0;// (*chunks)[thread_id] * thread_id;
 
-		if (thread_id - 1 >= 0){
-			prevId = thread_id - 1;
+		for (prevId = thread_id - 1; prevId >= 0; prevId--){
 			start = (*chunks)[prevId];
 		}
 		int end = start + (*chunks)[thread_id];
@@ -118,10 +116,10 @@ void Ped::Model::ompTick(){
 		
 		
 		start = 0;
-		if (thread_id - 1 >= 0){
-			prevId = thread_id - 1;
+		for (prevId = thread_id - 1; prevId >= 0; prevId--){
 			start = (*leafChunks)[prevId];
 		}
+
 		end = start + (*leafChunks)[thread_id];
 		for (int chunk = start; chunk < end; chunk++)
 			move(leafNodes[chunk]);
