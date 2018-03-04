@@ -84,7 +84,7 @@ int main(int argc, char*argv[]) {
 		MainWindow mainwindow(model);
 
 		// Default number of steps to simulate
-		const int maxNumberOfStepsToSimulate = 10000;//1000000000;
+		const int maxNumberOfStepsToSimulate = 10;// 10000;//1000000000;
 		PedSimulation *simulation = new PedSimulation(model, mainwindow);
 
 		cout << "Demo setup complete, running ..." << endl;

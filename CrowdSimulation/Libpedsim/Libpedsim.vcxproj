@@ -232,24 +232,18 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="src\cuda_testkernel.cu" />
+    <CudaCompile Include="src\heatmap.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\QuadTree.cpp" />
     <ClCompile Include="src\ped_agent_collection.cpp" />
-    <ClCompile Include="src\heatmap_seq.cpp" />
     <ClCompile Include="src\ped_agent.cpp" />
     <ClCompile Include="src\ped_model.cpp" />
     <ClCompile Include="src\ped_vector.cpp" />
     <ClCompile Include="src\ped_waypoint.cpp" />
     <ClCompile Include="src\ped_waypoints.cpp" />
-    <CudaCompile Include="src\heatmap.cu">
-      <FileType>CppCode</FileType>
-      <GPUDebugInfo Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GPUDebugInfo>
-      <GenerateLineInfo Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateLineInfo>
-    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\heatmap.h" />
     <ClInclude Include="src\QuadTree.h" />
     <ClInclude Include="src\ped_agent_collection.h" />
     <ClInclude Include="src\ped_waypoints.h" />

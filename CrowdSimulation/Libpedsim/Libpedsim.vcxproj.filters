@@ -34,9 +34,6 @@
     <ClCompile Include="src\ped_waypoints.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\heatmap_seq.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\cuda_testkernel.h">
@@ -59,6 +56,5 @@
     </ClInclude>
     <ClInclude Include="src\ped_agent_collection.h" />
     <ClInclude Include="src\QuadTree.h" />
-    <ClInclude Include="src\heatmap.h" />
   </ItemGroup>
 </Project>

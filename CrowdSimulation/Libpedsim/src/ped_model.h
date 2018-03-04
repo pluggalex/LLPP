@@ -125,15 +125,24 @@ namespace Ped{
 #define CELLSIZE 5
 #define SCALED_SIZE SIZE*CELLSIZE
 
+		// Device version of the defines above
+		int * d_SIZE;
+		int * d_CELLSIZE;
+		int * d_SCALED_SIZE;
+
+		// Desireds
+		int no_agents;
+		int* d_agents;
+		float* d_desiredXs;
+		float* d_desiredYs;
+
 		// The heatmap representing the density of agents
 		int ** heatmap;
 		int * d_heatmap;
-		int * d_heatmap_row_size;
 
 		// The scaled heatmap that fits to the view
 		int ** scaled_heatmap;
 		int * d_scaled_heatmap;
-		int * d_scaled_heatmap_row_size;
 
 		// The final heatmap: blurred and scaled to fit the view
 		int ** blurred_heatmap;

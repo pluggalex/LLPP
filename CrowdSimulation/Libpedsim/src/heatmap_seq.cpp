@@ -2,7 +2,7 @@
 //
 // Implements the heatmap functionality. 
 //
-/*#include "ped_model.h"
+#include "ped_model.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -130,4 +130,3 @@ void Ped::Model::updateHeatmapSeq()
 int Ped::Model::getHeatmapSize() const {
 	return SCALED_SIZE;
 }
-*/
