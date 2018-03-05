@@ -147,7 +147,7 @@ namespace Ped{
 		// The final heatmap: blurred and scaled to fit the view
 		int ** blurred_heatmap;
 		int * d_blurred_heatmap;
-		int * d_blur_filter;
+		//int * d_blur_filter;
 
 		void setupHeatmapSeq();
 		void updateHeatmapStart();
@@ -155,7 +155,7 @@ namespace Ped{
 		void cleanupCuda();
 
 		//Streams maybee
-		//template<T> T s1;
+		//void * s1;
 	};
 }
 #endif

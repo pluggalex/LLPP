@@ -91,12 +91,11 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 void Ped::Model::seqTick(){
 	agentCollection->computeNextDesiredPositionScalar(0, agentCollection->size());
 	updateHeatmapStart();
+	//printf("FIRST! - ");
 	std::vector<QTree*> leafNodes = rootRegion->getLeafNodes();
 	for (auto leaf : leafNodes)
 		move(leaf);
 	waitCuda();
-	//agentCollection->updateFromDesired(0, agentCollection->size());
-
 }
 
 

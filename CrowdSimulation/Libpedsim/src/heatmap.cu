@@ -7,8 +7,22 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include <stdlib.h>
+//#include <stdio.h>
 #include <math.h>
 
+
+/*
+class SmartCudaStream{
+	cudaStream_t stream1;
+public:
+	SmartCudaStream(){
+		cudaStreamCreate(&stream1);
+	}
+	~SmartCudaStream(){
+		cudaStreamDestroy(stream1);
+	}
+};*/
+__constant__ int d_cst_filter[5 * 5];
 
 // Sets up the heatmap
 void Ped::Model::setupHeatmapSeq()
@@ -57,8 +71,11 @@ void Ped::Model::setupHeatmapSeq()
 		{ 4, 16, 26, 16, 4 },
 		{ 1, 4, 7, 4, 1 }
 	};
-	cudaMalloc((void**)&d_blur_filter, 5*5*sizeof(int));
-	cudaMemcpy(d_blur_filter, w, 5*5*sizeof(int), cudaMemcpyHostToDevice);
+
+	//cudaMalloc((void**)&d_blur_filter, 5*5*sizeof(int));
+	//cudaMemcpy(d_blur_filter, w, 5*5*sizeof(int), cudaMemcpyHostToDevice);
+
+	cudaMemcpyToSymbol(d_cst_filter, w, 5 * 5 * sizeof(int));
 
 	//Get and copy number of agents to device
 	no_agents = agentCollection->size();
@@ -83,7 +100,7 @@ void Ped::Model::cleanupCuda(){
 	cudaFree(d_heatmap);
 	cudaFree(d_scaled_heatmap);
 	cudaFree(d_blurred_heatmap);
-	cudaFree(d_blur_filter);
+	//cudaFree(d_blur_filter);
 	cudaFree(d_agents);
 	cudaFree(d_desiredXs);
 	cudaFree(d_desiredYs);
@@ -144,7 +161,7 @@ void scale(int* d_scaled_heatmap, int* d_SCALED_SIZE, int* d_heatmap){
 
 
 __global__
-void gauss(int* d_scaled_heatmap, int* d_blurred_heatmap, int* d_SCALED_SIZE, int* d_blur_filter){
+void gauss(int* d_scaled_heatmap, int* d_blurred_heatmap, int* d_SCALED_SIZE){
 	long tid = ((blockIdx.y * blockDim.y + threadIdx.y) * (gridDim.x * blockDim.x)) + (blockIdx.x * blockDim.x) + threadIdx.x;
 	int global_row_length = *d_SCALED_SIZE;
 	int heatmap_row = tid / global_row_length;
@@ -191,25 +208,26 @@ void gauss(int* d_scaled_heatmap, int* d_blurred_heatmap, int* d_SCALED_SIZE, in
 			else
 				heatmap_value = d_scaled_heatmap[heatmap_index];
 
-			sum += d_blur_filter[filter_index] * heatmap_value;
+			//sum += d_blur_filter[filter_index] * heatmap_value;
+			sum += d_cst_filter[filter_index] * heatmap_value;
 		}
 	}
 
 	int value = sum / 273;// WEIGHTSUM = 273;
 	value = 0x00FF0000 | value << 24;
 	d_blurred_heatmap[tid] = value;
+	//if (tid == 16000)printf(" - HIT \n");
 }
 
 // Updates the heatmap according to the agent positions
 void Ped::Model::updateHeatmapStart()
 {
 	//Init the stream for asynch exec.
-	//*stream1;// , stream2, stream3;
-	cudaStream_t stream1;// = (cudaStream_t*)s1;
+	cudaStream_t stream1;
 	cudaStreamCreate(&stream1);
 
 	//Block sizes for different heatmaps
-	int threads = 1024;
+	int threads = SIZE;
 	dim3 heatmap_blocks(SIZE*SIZE / threads);
 	dim3 scaled_heatmap_blocks(SCALED_SIZE*SCALED_SIZE / threads);
 	int threadsGauss = BLOCKSIZE;
@@ -250,8 +268,10 @@ void Ped::Model::updateHeatmapStart()
 	
 
 	//Do the gaussing and get a nice blurr. Retrun the blurred array to host memory
-	gauss << <gauss_heatmap_blocks, gauss_heatmap_threads, 0, stream1 >> >(d_scaled_heatmap, d_blurred_heatmap, d_SCALED_SIZE, d_blur_filter);
+	gauss << <gauss_heatmap_blocks, gauss_heatmap_threads, 0, stream1 >> >(d_scaled_heatmap, d_blurred_heatmap, d_SCALED_SIZE);
 	cudaMemcpyAsync(blurred_heatmap[0], d_blurred_heatmap, SCALED_SIZE*SCALED_SIZE*sizeof(int), cudaMemcpyDeviceToHost, stream1);
+	//cudaDeviceSynchronize();
+	cudaStreamDestroy(stream1);
 }
 
 

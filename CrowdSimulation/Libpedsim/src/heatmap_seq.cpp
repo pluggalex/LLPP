@@ -43,7 +43,7 @@ void Ped::Model::setupHeatmapSeq()
 
 
 // Updates the heatmap according to the agent positions
-void Ped::Model::updateHeatmapSeq()
+void Ped::Model::updateHeatmapStart()
 {
 
 	for (int x = 0; x < SIZE; x++)
@@ -130,3 +130,6 @@ void Ped::Model::updateHeatmapSeq()
 int Ped::Model::getHeatmapSize() const {
 	return SCALED_SIZE;
 }
+
+void Ped::Model::waitCuda(){ return; };
+void Ped::Model::cleanupCuda(){ return; };
