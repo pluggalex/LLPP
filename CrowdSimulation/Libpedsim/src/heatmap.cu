@@ -6,9 +6,9 @@
 #include "ped_model.h"
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
 
 // Sets up the heatmap
 void Ped::Model::setupHeatmapSeq()
@@ -31,16 +31,6 @@ void Ped::Model::setupHeatmapSeq()
 		scaled_heatmap[i] = shm + SCALED_SIZE*i;
 		blurred_heatmap[i] = bhm + SCALED_SIZE*i;
 	}
-
-	//Copy SIZE to device
-	int temp_SIZE = SIZE;
-	cudaMalloc((void**)&d_SIZE, sizeof(int));
-	cudaMemcpy(d_SIZE, &temp_SIZE, sizeof(int), cudaMemcpyHostToDevice);
-
-	//Copy CELLSIZE to device
-	int temp_CELLSIZE = CELLSIZE;
-	cudaMalloc((void**)&d_CELLSIZE, sizeof(int));
-	cudaMemcpy(d_CELLSIZE, &temp_CELLSIZE, sizeof(int), cudaMemcpyHostToDevice);
 
 	//Copy SCALED_SIZE to device
 	int temp_SCALED_SIZE = SCALED_SIZE;
@@ -75,19 +65,38 @@ void Ped::Model::setupHeatmapSeq()
 	cudaMalloc(&d_agents, sizeof(int));
 	cudaMemcpyAsync(d_agents, &no_agents, sizeof(int), cudaMemcpyHostToDevice);
 
-
+	//Allocate the desired vectors for cuda
 	cudaMalloc(&d_desiredXs, no_agents*sizeof(float));
 	cudaMalloc(&d_desiredYs, no_agents*sizeof(float));
 
+	//Create the streams
+	//cudaStream_t* stream1 = (cudaStream_t*)s1;
+	//cudaStreamCreate((cudaStream_t*)s1);
+	//cudaStream_t* stream2 = (cudaStream_t*)s2;
+	//cudaStreamCreate(stream2);
+	//cudaStream_t* stream3 = (cudaStream_t*)s3;
+	//cudaStreamCreate(stream3);
 }
 
+void Ped::Model::cleanupCuda(){
+	cudaFree(d_SCALED_SIZE);
+	cudaFree(d_heatmap);
+	cudaFree(d_scaled_heatmap);
+	cudaFree(d_blurred_heatmap);
+	cudaFree(d_blur_filter);
+	cudaFree(d_agents);
+	cudaFree(d_desiredXs);
+	cudaFree(d_desiredYs);
+//	cudaStreamDestroy();
+
+}
 
 /*
 * Fades the blocks before each tick. 
 */
 __global__
 void fade(int* d_heatmap){
-	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+	long tid = threadIdx.x + blockIdx.x * blockDim.x;
 	d_heatmap[tid] = d_heatmap[tid] * 0.80;
 }
 
@@ -95,13 +104,13 @@ void fade(int* d_heatmap){
 * Increase the red color for the block for each agent that wants to access it.
 */
 __global__
-void locationContention(int* d_heatmap, float* d_desiredXs, float* d_desiredYs, int* d_agents, int* d_SIZE){
-	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+void locationContention(int* d_heatmap, float* d_desiredXs, float* d_desiredYs, int* d_agents){
+	long tid = threadIdx.x + blockIdx.x * blockDim.x;
 	if (tid < *d_agents){
 		int desX = d_desiredXs[tid];
 		int desY = d_desiredYs[tid];
 		int inc = 40;
-		atomicAdd(&d_heatmap[desY*(*d_SIZE) + desX], inc);
+		atomicAdd(&d_heatmap[desY*SIZE + desX], inc);
 	}
 }
 
@@ -110,24 +119,24 @@ void locationContention(int* d_heatmap, float* d_desiredXs, float* d_desiredYs, 
 */
 __global__
 void ceiling(int* d_heatmap){
-	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+	long tid = threadIdx.x + blockIdx.x * blockDim.x;
 	int ceiling = 255;
 	if (d_heatmap[tid] > ceiling)
 		d_heatmap[tid] = ceiling;
 }
 
 __global__
-void scale(int* d_scaled_heatmap, int* d_SCALED_SIZE, int* d_heatmap, int* d_SIZE, int* d_CELLSIZE){
-	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+void scale(int* d_scaled_heatmap, int* d_SCALED_SIZE, int* d_heatmap){
+	long tid = threadIdx.x + blockIdx.x * blockDim.x;
 	int s_row = tid / (*d_SCALED_SIZE); 
 	int s_col = tid; //Column is either thread id if row == 0. Otherwise thread id - row * rowsize
 	if (s_row)
 		s_col = tid - s_row * (*d_SCALED_SIZE);
 
 	//Scale down row and column to heatmap index
-	int row = s_row / *d_CELLSIZE; 
-	int col = s_col / *d_CELLSIZE;
-	int index = col + row * (*d_SIZE);
+	int row = s_row / CELLSIZE;
+	int col = s_col / CELLSIZE;
+	int index = col + row * SIZE;
 
 	d_scaled_heatmap[tid] = d_heatmap[index];
 }
@@ -136,81 +145,119 @@ void scale(int* d_scaled_heatmap, int* d_SCALED_SIZE, int* d_heatmap, int* d_SIZ
 
 __global__
 void gauss(int* d_scaled_heatmap, int* d_blurred_heatmap, int* d_SCALED_SIZE, int* d_blur_filter){
-	if (blockIdx.x >= 2 - gridDim.x || threadIdx.x >= 2 - blockDim.x || blockIdx.x < 2 || threadIdx.x < 2)
+	long tid = ((blockIdx.y * blockDim.y + threadIdx.y) * (gridDim.x * blockDim.x)) + (blockIdx.x * blockDim.x) + threadIdx.x;
+	int global_row_length = *d_SCALED_SIZE;
+	int heatmap_row = tid / global_row_length;
+	int heatmap_col = tid;
+	if (heatmap_row)
+		heatmap_col = tid - heatmap_row * global_row_length;
+
+	__shared__ int s[BLOCKSIZE];
+	int shared_index = threadIdx.x + threadIdx.y * blockDim.x;
+	s[shared_index] = d_scaled_heatmap[tid];
+	__syncthreads();
+
+	//printf("Idx: %d, bIdx: %d, bIdy: %d, tid: %d\n", threadIdx.x, blockIdx.x, blockIdx.y, tid);
+
+	if (heatmap_row < 2 || heatmap_col < 2 || heatmap_row >= global_row_length - 2 || heatmap_col >= global_row_length - 2)
 		return;//To close the window/field border
 
-	int tid = threadIdx.x + blockIdx.x * blockDim.x;
 	int heatmap_index = 0;
 	int heatmap_row_index = 0;
 	int filter_index = 0;
 	int filter_row = 0;
 	int sum = 0;
+	int heatmap_value = 0;
+	int shared_row = 0;
+	bool sharableThread = (threadIdx.x >= 2 && threadIdx.x < BLOCKROW - 2 && threadIdx.y >= 2 && threadIdx.y < BLOCKROW-2);
 
-	int heatmap_row = tid / *d_SCALED_SIZE;
-	int heatmap_col = tid;
-	if (heatmap_row)
-		heatmap_col = tid - heatmap_row * (*d_SCALED_SIZE);
+
 
 	//Summarize filtered values from neighbors
 	for (int k = -2; k < 3; k++)
 	{
 		filter_row = (2 + k) * 5;// filter row length == 5
-		heatmap_row_index = (heatmap_row + k) * (*d_SCALED_SIZE);
+		heatmap_row_index = (heatmap_row + k) * global_row_length;
+		shared_row = (threadIdx.y + k) * blockDim.x;
 		for (int l = -2; l < 3; l++)
 		{
-			heatmap_index = l + heatmap_col + heatmap_row_index;
 			filter_index = 2 + l + filter_row;
-			sum += d_blur_filter[filter_index] * d_scaled_heatmap[heatmap_index];
+			heatmap_index = l + heatmap_col + heatmap_row_index;
+			shared_index = l + threadIdx.x + shared_row;
+
+			//Get heatmap value from shared memory if possible
+			if (sharableThread)
+				heatmap_value = s[shared_index];
+			else
+				heatmap_value = d_scaled_heatmap[heatmap_index];
+
+			sum += d_blur_filter[filter_index] * heatmap_value;
 		}
 	}
+
 	int value = sum / 273;// WEIGHTSUM = 273;
 	value = 0x00FF0000 | value << 24;
 	d_blurred_heatmap[tid] = value;
 }
 
 // Updates the heatmap according to the agent positions
-void Ped::Model::updateHeatmapSeq()
+void Ped::Model::updateHeatmapStart()
 {
-	cudaStream_t stream1;
+	//Init the stream for asynch exec.
+	//*stream1;// , stream2, stream3;
+	cudaStream_t stream1;// = (cudaStream_t*)s1;
 	cudaStreamCreate(&stream1);
-	int threadsPerBlock = 1024;
-	int heatmap_blocks = SIZE*SIZE / threadsPerBlock;
-	
 
-	//Fade heatmap
-	fade << <heatmap_blocks, threadsPerBlock, 0, stream1 >> >(d_heatmap);
-		
-	//Get and copy desired X's to device
+	//Block sizes for different heatmaps
+	int threads = 1024;
+	dim3 heatmap_blocks(SIZE*SIZE / threads);
+	dim3 scaled_heatmap_blocks(SCALED_SIZE*SCALED_SIZE / threads);
+	int threadsGauss = BLOCKSIZE;
+	int threadDim = BLOCKROW;
+	int blockDim = sqrt(SCALED_SIZE*SCALED_SIZE / threadsGauss);
+	dim3 gauss_heatmap_blocks(blockDim, blockDim);
+	dim3 gauss_heatmap_threads(threadDim, threadDim);
+
+	//Desireds Y's
 	vector<float> tempx = agentCollection->getDesiredX();
 	float* h_desiredXs = &(tempx[0]);
-	cudaMemcpyAsync(d_desiredXs, h_desiredXs, no_agents*sizeof(float), cudaMemcpyHostToDevice);
-	
 
-	//Get and copy desired Y's to device
+	//Desireds X's 
 	vector<float> tempy = agentCollection->getDesiredY();
 	float* h_desiredYs = &(tempy[0]);
-	cudaMemcpyAsync(d_desiredYs, h_desiredYs, no_agents*sizeof(float), cudaMemcpyHostToDevice);
+
+	//Fade heatmap
+	fade << <heatmap_blocks, threads, 0, stream1 >> >(d_heatmap);
+	
+	//Copy desired X's to device
+	cudaMemcpyAsync(d_desiredXs, h_desiredXs, no_agents*sizeof(float), cudaMemcpyHostToDevice, stream1);
+	
+
+	//Copy desired Y's to device
+	cudaMemcpyAsync(d_desiredYs, h_desiredYs, no_agents*sizeof(float), cudaMemcpyHostToDevice, stream1);
 
 
 	//Set location contention based on desired
-	locationContention << <heatmap_blocks, threadsPerBlock,  0, stream1 >> >(d_heatmap, d_desiredXs, d_desiredYs, d_agents, d_SIZE);
+	locationContention << <heatmap_blocks, threads, 0, stream1 >> >(d_heatmap, d_desiredXs, d_desiredYs, d_agents);
 
 
 	//Cut of values at max 255
-	ceiling << <heatmap_blocks, threadsPerBlock, 0, stream1 >> >(d_heatmap);
+	ceiling << <heatmap_blocks, threads, 0, stream1 >> >(d_heatmap);
 
 
 	// Scale the data for visual representation
-	int scaled_heatmap_blocks = SCALED_SIZE*SCALED_SIZE / threadsPerBlock;
-	scale << <scaled_heatmap_blocks, threadsPerBlock, 0, stream1 >> >(d_scaled_heatmap, d_SCALED_SIZE, d_heatmap, d_SIZE, d_CELLSIZE);
+	scale << <scaled_heatmap_blocks, threads, 0, stream1 >> >(d_scaled_heatmap, d_SCALED_SIZE, d_heatmap);
 	
 
 	//Do the gaussing and get a nice blurr. Retrun the blurred array to host memory
-	gauss << <scaled_heatmap_blocks, threadsPerBlock, 0, stream1 >> >(d_scaled_heatmap, d_blurred_heatmap, d_SCALED_SIZE, d_blur_filter);
-	cudaMemcpy(blurred_heatmap[0], d_blurred_heatmap, SCALED_SIZE*SCALED_SIZE*sizeof(int), cudaMemcpyDeviceToHost);
+	gauss << <gauss_heatmap_blocks, gauss_heatmap_threads, 0, stream1 >> >(d_scaled_heatmap, d_blurred_heatmap, d_SCALED_SIZE, d_blur_filter);
+	cudaMemcpyAsync(blurred_heatmap[0], d_blurred_heatmap, SCALED_SIZE*SCALED_SIZE*sizeof(int), cudaMemcpyDeviceToHost, stream1);
 }
 
 
+void Ped::Model::waitCuda(){
+	cudaDeviceSynchronize();
+}
 
 int Ped::Model::getHeatmapSize() const {
 	return SCALED_SIZE;

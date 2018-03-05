@@ -124,10 +124,10 @@ namespace Ped{
 #define SIZE 1024
 #define CELLSIZE 5
 #define SCALED_SIZE SIZE*CELLSIZE
+#define BLOCKROW 16
+#define BLOCKSIZE BLOCKROW*BLOCKROW
 
 		// Device version of the defines above
-		int * d_SIZE;
-		int * d_CELLSIZE;
 		int * d_SCALED_SIZE;
 
 		// Desireds
@@ -150,7 +150,12 @@ namespace Ped{
 		int * d_blur_filter;
 
 		void setupHeatmapSeq();
-		void updateHeatmapSeq();
+		void updateHeatmapStart();
+		void waitCuda();
+		void cleanupCuda();
+
+		//Streams maybee
+		//template<T> T s1;
 	};
 }
 #endif

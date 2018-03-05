@@ -90,11 +90,13 @@ void Ped::Model::setup(std::unique_ptr<Tagent_collection> _agentCollection)
 // Sequential tick
 void Ped::Model::seqTick(){
 	agentCollection->computeNextDesiredPositionScalar(0, agentCollection->size());
+	updateHeatmapStart();
 	std::vector<QTree*> leafNodes = rootRegion->getLeafNodes();
 	for (auto leaf : leafNodes)
 		move(leaf);
+	waitCuda();
 	//agentCollection->updateFromDesired(0, agentCollection->size());
-	updateHeatmapSeq();
+
 }
 
 
@@ -392,6 +394,8 @@ void Ped::Model::killThreads(){
 
 Ped::Model::~Model()
 {
+	cleanupCuda();
+
 	if (implementation == PTHREAD_2)
 		killThreads();
 
